@@ -19,7 +19,7 @@
   </style>
 </head>
 <body class="pb-24">
-  <!-- Topo com Botao Novo e Engrenagem -->
+  <!-- Topo -->
   <header class="sticky top-0 z-40 bg-[#0b132b]/95 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-2.5">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
@@ -30,8 +30,11 @@
         <p class="text-[11px] text-cyan-400">Gestão Telecom</p>
       </div>
     </div>
-    <div class="flex items-center gap-2">
-      <button onclick="abrirModalCliente()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-cyan-600/30">
+    <div class="flex items-center gap-1.5">
+      <button id="btnInstalarApp" onclick="acionarInstalacao()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-md shadow-emerald-600/30">
+        <i class="fa-solid fa-download"></i> Instalar
+      </button>
+      <button onclick="abrirModalCliente()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow-md shadow-cyan-600/30">
         <i class="fa-solid fa-plus"></i> Novo
       </button>
       <button onclick="abrirConfig()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs">
@@ -84,16 +87,16 @@
       </div>
     </div>
 
-    <!-- Lista -->
+    <!-- Lista de Clientes -->
     <div id="containerClientes" class="space-y-2.5"></div>
   </main>
 
-  <!-- Modal Cadastro e Edicao -->
+  <!-- Modal Cadastro/Edição de Cliente -->
   <div id="modalCliente" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card bg-slate-900 rounded-2xl w-full max-w-sm p-4 space-y-3 border border-slate-700 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <h3 id="modalClienteTitulo" class="font-bold text-white text-sm">Editar Cliente</h3>
-        <button onclick="fecharModalCliente()" class="text-slate-400 text-base"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="fecharModalCliente()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <input type="hidden" id="clienteId">
       <div>
@@ -163,6 +166,25 @@
   </div>
 
   <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('btnInstalarApp');
+      if (btn) btn.classList.remove('hidden');
+    });
+
+    function acionarInstalacao() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          deferredPrompt = null;
+        });
+      } else {
+        alert("Para instalar agora no Android:\n\n1. Toque nos 3 pontinhos (⋮) do Chrome no canto superior.\n2. Escolha 'Criar atalho' ou 'Instalar aplicativo'.\n3. Marque 'Abrir como janela' e confirme!");
+      }
+    }
+
     (function() {
       const manifest = {
         name: "Netsoluções",
@@ -185,7 +207,7 @@
     })();
 
     const CLIENTES_PADRAO = [
-      // TARRAFINHA
+      // TARRAFINHA (R104)
       { id: 1, ramal: "TARRAFINHA", nome: "Ariadna", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "92991780727" },
       { id: 2, ramal: "TARRAFINHA", nome: "Rose", cto: "CTO 2", vencimento: "03/11/2026", valor: 130, status: "Pago", fone: "" },
       { id: 3, ramal: "TARRAFINHA", nome: "Gessiane", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
@@ -242,4 +264,9 @@
       { id: 50, ramal: "MANELITO", nome: "ONU-Tony", cto: "CTO 2", vencimento: "15/11/2026", valor: 130, status: "Pago", fone: "9791658184" },
       { id: 51, ramal: "MANELITO", nome: "Adriano", cto: "CTO 2", vencimento: "25/11/2026", valor: 130, status: "Pago", fone: "" },
       { id: 52, ramal: "MANELITO", nome: "Elineide", cto: "CTO 2", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "" },
-      { id: 53, ramal: "MANELITO", nome: "Joaquim", cto: "CTO 2", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone
+      { id: 53, ramal: "MANELITO", nome: "Joaquim", cto: "CTO 2", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 54, ramal: "MANELITO", nome: "Fuscão Aquino", cto: "CTO 2", vencimento: "28/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 55, ramal: "MANELITO", nome: "Francielo", cto: "CTO 2", vencimento: "28/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 56, ramal: "MANELITO", nome: "Gabriel", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 57, ramal: "MANELITO", nome: "Renato", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Cortado", fone: "" },
+      { id: 58, ramal: "MANELITO", nome: "Francielam", cto: "CTO 3", vencimento: "22/11/2026", valor: 130, status: "Pago", fone: "" }
