@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -19,6 +18,7 @@
     body { background-color: #07090e; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .card-ativo { ring: 2px solid #3b82f6 !important; transform: scale(1.02); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col pb-12">
@@ -61,46 +61,75 @@
   </header>
 
   <main class="max-w-7xl mx-auto w-full px-4 pt-5 flex-1">
-    <!-- Indicadores -->
+    <!-- Indicadores Clicáveis -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-      <div class="bg-[#0f172a] border border-slate-800 rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-xs text-slate-400 font-medium">Assinantes</span>
-        <div class="mt-1 flex items-baseline justify-between">
+      <!-- Todos / Assinantes -->
+      <div id="card-total" onclick="window.filtrarPorCard('todos')" class="cursor-pointer bg-[#0f172a] border border-slate-800 hover:border-slate-600 transition rounded-xl p-3 flex flex-col justify-between select-none">
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-slate-400 font-medium">Assinantes</span>
+          <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between">
           <span id="stat-total" class="text-2xl font-black text-white">0</span>
           <span id="stat-previsto" class="text-[11px] text-slate-400 font-semibold">R$ 0</span>
         </div>
       </div>
-      <div class="bg-[#0f172a] border border-emerald-900/40 rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-xs text-emerald-400 font-medium">Pagos (✓)</span>
-        <div class="mt-1 flex items-baseline justify-between">
+
+      <!-- Pagos -->
+      <div id="card-pago" onclick="window.filtrarPorCard('pago')" class="cursor-pointer bg-[#0f172a] border border-emerald-900/40 hover:border-emerald-500/60 transition rounded-xl p-3 flex flex-col justify-between select-none">
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-emerald-400 font-medium">Pagos (✓)</span>
+          <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between">
           <span id="stat-pagos" class="text-2xl font-black text-emerald-400">0</span>
           <span id="stat-arrecadado" class="text-[11px] text-emerald-400/90 font-semibold">R$ 0</span>
         </div>
       </div>
-      <div class="bg-[#0f172a] border border-amber-900/40 rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-xs text-amber-400 font-medium">Em Aberto</span>
-        <div class="mt-1 flex items-baseline justify-between">
+
+      <!-- Em Aberto -->
+      <div id="card-aberto" onclick="window.filtrarPorCard('aberto')" class="cursor-pointer bg-[#0f172a] border border-amber-900/40 hover:border-amber-500/60 transition rounded-xl p-3 flex flex-col justify-between select-none">
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-amber-400 font-medium">Em Aberto</span>
+          <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between">
           <span id="stat-aberto" class="text-2xl font-black text-amber-400">0</span>
           <span id="stat-valor-aberto" class="text-[11px] text-amber-400/90 font-semibold">R$ 0</span>
         </div>
       </div>
-      <div class="bg-[#0f172a] border border-rose-900/40 rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-xs text-rose-400 font-medium">Vencidos (X)</span>
-        <div class="mt-1 flex items-baseline justify-between">
+
+      <!-- Vencidos -->
+      <div id="card-vencido" onclick="window.filtrarPorCard('vencido')" class="cursor-pointer bg-[#0f172a] border border-rose-900/40 hover:border-rose-500/60 transition rounded-xl p-3 flex flex-col justify-between select-none">
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-rose-400 font-medium">Vencidos (X)</span>
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between">
           <span id="stat-vencidos" class="text-2xl font-black text-rose-400">0</span>
           <span id="stat-valor-vencidos" class="text-[11px] text-rose-400/90 font-semibold">R$ 0</span>
         </div>
       </div>
-      <div class="bg-[#0f172a] border border-cyan-900/40 rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-xs text-cyan-400 font-medium">Vence Hoje</span>
-        <div class="mt-1 flex items-baseline justify-between">
+
+      <!-- Vence Hoje -->
+      <div id="card-hoje" onclick="window.filtrarPorCard('hoje')" class="cursor-pointer bg-[#0f172a] border border-cyan-900/40 hover:border-cyan-500/60 transition rounded-xl p-3 flex flex-col justify-between select-none">
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-cyan-400 font-medium">Vence Hoje</span>
+          <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between">
           <span id="stat-vence-hoje" class="text-2xl font-black text-cyan-400">0</span>
           <span id="stat-valor-hoje" class="text-[11px] text-cyan-400/90 font-semibold">R$ 0</span>
         </div>
       </div>
-      <div class="bg-[#0f172a] border border-purple-900/40 rounded-xl p-3 flex flex-col justify-between">
-        <span class="text-xs text-purple-400 font-medium">Cortados (✂)</span>
-        <div class="mt-1 flex items-baseline justify-between">
+
+      <!-- Cortados -->
+      <div id="card-cortado" onclick="window.filtrarPorCard('cortado')" class="cursor-pointer bg-[#0f172a] border border-purple-900/40 hover:border-purple-500/60 transition rounded-xl p-3 flex flex-col justify-between select-none">
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-purple-400 font-medium">Cortados (✂)</span>
+          <i data-lucide="scissors" class="w-4 h-4 text-purple-400"></i>
+        </div>
+        <div class="mt-2 flex items-baseline justify-between">
           <span id="stat-cortados" class="text-2xl font-black text-purple-400">0</span>
           <span id="stat-valor-cortados" class="text-[11px] text-purple-400/90 font-semibold">R$ 0</span>
         </div>
@@ -108,369 +137,30 @@
     </div>
 
     <!-- Barra de Busca e Filtros -->
-    <div class="bg-[#0f172a] border border-slate-800 p-3 rounded-xl mb-5 flex flex-wrap gap-2 items-center justify-between">
+    <div id="secao-tabela" class="bg-[#0f172a] border border-slate-800 p-3 rounded-xl mb-5 flex flex-wrap gap-2 items-center justify-between">
       <div class="flex flex-wrap gap-2 items-center flex-1 min-w-[280px]">
         <div class="relative flex-1 min-w-[180px]">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-500"></i>
           <input type="text" id="filtro-busca" oninput="window.renderizarTabela()" placeholder="Buscar cliente, CTO ou telefone..." class="w-full bg-slate-900 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500">
         </div>
         <select id="filtro-ramal" onchange="window.renderizarTabela()" class="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-sm text-slate-300 focus:outline-none">
-          <option value="">Todos os Ramais</option>
+          <option value="">Todos os Ramais / VLANs</option>
         </select>
-        <select id="filtro-status" onchange="window.renderizarTabela()" class="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-sm text-slate-300 focus:outline-none">
+        <select id="filtro-status" onchange="window.mudarFiltroSelect()" class="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-sm text-slate-300 focus:outline-none">
           <option value="">Todos os Status</option>
           <option value="Pago">Pagos (✓)</option>
           <option value="Pendente">Pendentes (X)</option>
           <option value="Cortado">Cortados (✂)</option>
         </select>
+        <button onclick="window.limparTodosFiltros()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-semibold flex items-center space-x-1 transition">
+          <i data-lucide="filter-x" class="w-3.5 h-3.5"></i>
+          <span>Limpar</span>
+        </button>
+      </div>
+      <div class="text-xs text-slate-400 font-medium">
+        Filtrando: <span id="contador-filtrados" class="text-blue-400 font-bold">0</span> de <span id="contador-total-base" class="text-slate-300 font-bold">0</span> registros
       </div>
     </div>
 
     <!-- Tabela de Clientes -->
-    <div class="bg-[#0f172a] border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-      <div class="overflow-x-auto custom-scroll">
-        <table class="w-full text-left text-sm whitespace-nowrap">
-          <thead class="bg-slate-900/80 text-slate-400 uppercase text-[11px] font-bold tracking-wider border-b border-slate-800">
-            <tr>
-              <th class="px-4 py-3">Cliente</th>
-              <th class="px-4 py-3">Ramal / VLAN</th>
-              <th class="px-4 py-3">CTO</th>
-              <th class="px-4 py-3 text-center">Dia Venc.</th>
-              <th class="px-4 py-3">Valor</th>
-              <th class="px-4 py-3 text-center">Status</th>
-              <th class="px-4 py-3">Telefone</th>
-              <th class="px-4 py-3 text-center">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-clientes" class="divide-y divide-slate-800/60 font-medium"></tbody>
-        </table>
-      </div>
-    </div>
-  </main>
-
-  <!-- Modal Cliente -->
-  <div id="modal-cliente" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-[#0f172a] border border-slate-800 rounded-2xl max-w-lg w-full p-5 shadow-2xl">
-      <h3 id="modal-titulo" class="text-base font-bold text-white mb-4">Adicionar Assinante</h3>
-      <form id="form-cliente" onsubmit="window.salvarCliente(event)" class="space-y-3">
-        <input type="hidden" id="cliente-id">
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Nome do Cliente</label>
-          <input type="text" id="campo-nome" required class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Ramal / VLAN</label>
-            <input type="text" id="campo-ramal" required list="lista-ramais" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
-            <datalist id="lista-ramais"></datalist>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">CTO</label>
-            <input type="text" id="campo-cto" required placeholder="Ex: CTO 2" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Dia Vencimento</label>
-            <input type="number" id="campo-dia" min="1" max="31" required class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Valor (R$)</label>
-            <input type="number" step="0.01" id="campo-valor" required class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Status</label>
-            <select id="campo-status" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-2 text-sm text-white focus:outline-none">
-              <option value="Pendente">Pendente</option>
-              <option value="Pago">Pago</option>
-              <option value="Cortado">Cortado</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Telefone WhatsApp (DDD + Número)</label>
-          <input type="text" id="campo-telefone" placeholder="Ex: 92991780727" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none">
-        </div>
-        <div class="flex justify-end space-x-2 pt-3">
-          <button type="button" onclick="window.fecharModalCliente()" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-sm hover:bg-slate-700 transition">Cancelar</button>
-          <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 transition">Salvar na Nuvem</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Conexão Firebase Firestore Modular em Tempo Real -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { 
-      getFirestore, 
-      collection, 
-      onSnapshot, 
-      doc, 
-      setDoc, 
-      updateDoc, 
-      deleteDoc, 
-      writeBatch 
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAyp1ssuN21FXrGW6Eb1LtIJFWIKE8GOvU",
-      authDomain: "netsolucoes-724e8.firebaseapp.com",
-      projectId: "netsolucoes-724e8",
-      storageBucket: "netsolucoes-724e8.firebasestorage.app",
-      messagingSenderId: "740396405187",
-      appId: "1:740396405187:web:bd06a1178be583ce8ced76"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const clientesCol = collection(db, "clientes");
-
-    let clientes = [];
-
-    // Ouve em tempo real qualquer alteração feita no PC ou celular
-    onSnapshot(clientesCol, (snapshot) => {
-      clientes = [];
-      snapshot.forEach((docSnapshot) => {
-        clientes.push({ id: docSnapshot.id, ...docSnapshot.data() });
-      });
-      atualizarMetricas();
-      renderizarTabela();
-    }, (error) => {
-      console.error("Erro na sincronização Firebase:", error);
-      document.getElementById('cloud-badge').innerHTML = '<span class="text-rose-400">Offline / Verifique Regras</span>';
-    });
-
-    window.atualizarMetricas = function() {
-      const hoje = new Date().getDate();
-      let total = clientes.length, previsto = 0, pagos = 0, arrecadado = 0;
-      let abertos = 0, vAberto = 0, vencidos = 0, vVencidos = 0;
-      let hojeCount = 0, vHoje = 0, cortados = 0, vCortados = 0;
-
-      clientes.forEach(c => {
-        const val = parseFloat(c.valor) || 0;
-        previsto += val;
-        if (c.status === 'Pago') {
-          pagos++;
-          arrecadado += val;
-        } else if (c.status === 'Cortado') {
-          cortados++;
-          vCortados += val;
-        } else {
-          if (c.dia === hoje) {
-            hojeCount++;
-            vHoje += val;
-          } else if (c.dia < hoje) {
-            vencidos++;
-            vVencidos += val;
-          } else {
-            abertos++;
-            vAberto += val;
-          }
-        }
-      });
-
-      document.getElementById('stat-total').innerText = total;
-      document.getElementById('stat-previsto').innerText = 'R$ ' + previsto.toFixed(0);
-      document.getElementById('stat-pagos').innerText = pagos;
-      document.getElementById('stat-arrecadado').innerText = 'R$ ' + arrecadado.toFixed(0);
-      document.getElementById('stat-aberto').innerText = abertos;
-      document.getElementById('stat-valor-aberto').innerText = 'R$ ' + vAberto.toFixed(0);
-      document.getElementById('stat-vencidos').innerText = vencidos;
-      document.getElementById('stat-valor-vencidos').innerText = 'R$ ' + vVencidos.toFixed(0);
-      document.getElementById('stat-vence-hoje').innerText = hojeCount;
-      document.getElementById('stat-valor-hoje').innerText = 'R$ ' + vHoje.toFixed(0);
-      document.getElementById('stat-cortados').innerText = cortados;
-      document.getElementById('stat-valor-cortados').innerText = 'R$ ' + vCortados.toFixed(0);
-    };
-
-    window.renderizarTabela = function() {
-      const tbody = document.getElementById('tabela-clientes');
-      const busca = document.getElementById('filtro-busca').value.toLowerCase();
-      const ramalFiltro = document.getElementById('filtro-ramal').value;
-      const statusFiltro = document.getElementById('filtro-status').value;
-      const hoje = new Date().getDate();
-
-      const ramais = [...new Set(clientes.map(c => c.ramal).filter(Boolean))].sort();
-      const selectRamal = document.getElementById('filtro-ramal');
-      const datalist = document.getElementById('lista-ramais');
-      selectRamal.innerHTML = '<option value="">Todos os Ramais</option>' + ramais.map(r => `<option value="${r}">${r}</option>`).join('');
-      datalist.innerHTML = ramais.map(r => `<option value="${r}"></option>`).join('');
-      selectRamal.value = ramalFiltro;
-
-      const filtrados = clientes.filter(c => {
-        const matchesBusca = (c.nome && c.nome.toLowerCase().includes(busca)) || 
-                             (c.cto && c.cto.toLowerCase().includes(busca)) || 
-                             (c.telefone && c.telefone.includes(busca));
-        const matchesRamal = !ramalFiltro || c.ramal === ramalFiltro;
-        const matchesStatus = !statusFiltro || c.status === statusFiltro;
-        return matchesBusca && matchesRamal && matchesStatus;
-      });
-
-      tbody.innerHTML = filtrados.map(c => {
-        let statusBadge = '';
-        if (c.status === 'Pago') {
-          statusBadge = `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-1 rounded-full font-bold">Pago (✓)</span>`;
-        } else if (c.status === 'Cortado') {
-          statusBadge = `<span class="bg-purple-500/10 text-purple-400 border border-purple-500/30 text-xs px-2.5 py-1 rounded-full font-bold">Cortado (✂)</span>`;
-        } else {
-          if (c.dia === hoje) {
-            statusBadge = `<span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs px-2.5 py-1 rounded-full font-bold">Vence Hoje</span>`;
-          } else if (c.dia < hoje) {
-            statusBadge = `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs px-2.5 py-1 rounded-full font-bold">Vencido</span>`;
-          } else {
-            statusBadge = `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs px-2.5 py-1 rounded-full font-bold">Em Aberto</span>`;
-          }
-        }
-
-        const msgWhats = encodeURIComponent(`Olá ${c.nome}, informamos sobre a sua mensalidade de internet Netsoluções Telecom no valor de R$ ${Number(c.valor).toFixed(2)} com vencimento no dia ${c.dia}. Caso já tenha efetuado o pagamento, por favor desconsidere.`);
-        const linkWhats = c.telefone ? `https://wa.me/55${c.telefone.replace(/\D/g, '')}?text=${msgWhats}` : '#';
-
-        return `
-          <tr class="hover:bg-slate-800/40 transition">
-            <td class="px-4 py-3 font-semibold text-white">${c.nome}</td>
-            <td class="px-4 py-3 text-xs text-slate-400">${c.ramal || '-'}</td>
-            <td class="px-4 py-3"><span class="bg-slate-800 text-blue-300 px-2 py-0.5 rounded text-xs border border-slate-700">${c.cto || '-'}</span></td>
-            <td class="px-4 py-3 text-center text-slate-300 font-bold">${c.dia}</td>
-            <td class="px-4 py-3 text-slate-200 font-bold">R$ ${Number(c.valor).toFixed(2)}</td>
-            <td class="px-4 py-3 text-center">${statusBadge}</td>
-            <td class="px-4 py-3 text-slate-400 text-xs">${c.telefone || '-'}</td>
-            <td class="px-4 py-3 text-center">
-              <div class="flex items-center justify-center space-x-1">
-                <button onclick="window.marcarPago('${c.id}')" title="Marcar Pago" class="p-1.5 rounded hover:bg-emerald-500/20 text-emerald-400"><i data-lucide="check" class="w-4 h-4"></i></button>
-                <button onclick="window.alternarCorte('${c.id}')" title="Cortar / Reativar" class="p-1.5 rounded hover:bg-purple-500/20 text-purple-400"><i data-lucide="scissors" class="w-4 h-4"></i></button>
-                ${c.telefone ? `<a href="${linkWhats}" target="_blank" title="WhatsApp" class="p-1.5 rounded hover:bg-green-500/20 text-green-400 inline-block"><i data-lucide="message-circle" class="w-4 h-4"></i></a>` : ''}
-                <button onclick="window.editarCliente('${c.id}')" title="Editar" class="p-1.5 rounded hover:bg-blue-500/20 text-blue-400"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                <button onclick="window.removerCliente('${c.id}')" title="Excluir" class="p-1.5 rounded hover:bg-rose-500/20 text-rose-400"><i data-lucide="trash" class="w-4 h-4"></i></button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-      lucide.createIcons();
-    };
-
-    window.abrirModalCliente = function() {
-      document.getElementById('form-cliente').reset();
-      document.getElementById('cliente-id').value = '';
-      document.getElementById('modal-titulo').innerText = 'Adicionar Assinante';
-      document.getElementById('modal-cliente').classList.remove('hidden');
-    };
-
-    window.fecharModalCliente = function() {
-      document.getElementById('modal-cliente').classList.add('hidden');
-    };
-
-    window.salvarCliente = async function(e) {
-      e.preventDefault();
-      const id = document.getElementById('cliente-id').value;
-      const docId = id || Date.now().toString();
-
-      const dados = {
-        nome: document.getElementById('campo-nome').value.trim(),
-        ramal: document.getElementById('campo-ramal').value.trim(),
-        cto: document.getElementById('campo-cto').value.trim(),
-        dia: parseInt(document.getElementById('campo-dia').value),
-        valor: parseFloat(document.getElementById('campo-valor').value),
-        status: document.getElementById('campo-status').value,
-        telefone: document.getElementById('campo-telefone').value.trim()
-      };
-
-      try {
-        await setDoc(doc(db, "clientes", docId), dados, { merge: true });
-        window.fecharModalCliente();
-      } catch (err) {
-        alert("Erro ao salvar no banco: " + err.message);
-      }
-    };
-
-    window.editarCliente = function(id) {
-      const c = clientes.find(item => item.id === id);
-      if (!c) return;
-      document.getElementById('cliente-id').value = c.id;
-      document.getElementById('campo-nome').value = c.nome || '';
-      document.getElementById('campo-ramal').value = c.ramal || '';
-      document.getElementById('campo-cto').value = c.cto || '';
-      document.getElementById('campo-dia').value = c.dia || '';
-      document.getElementById('campo-valor').value = c.valor || '';
-      document.getElementById('campo-status').value = c.status || 'Pendente';
-      document.getElementById('campo-telefone').value = c.telefone || '';
-      document.getElementById('modal-titulo').innerText = 'Editar Assinante';
-      document.getElementById('modal-cliente').classList.remove('hidden');
-    };
-
-    window.marcarPago = async function(id) {
-      const c = clientes.find(item => item.id === id);
-      if (c) {
-        const novoStatus = (c.status === 'Pago') ? 'Pendente' : 'Pago';
-        await updateDoc(doc(db, "clientes", id), { status: novoStatus });
-      }
-    };
-
-    window.alternarCorte = async function(id) {
-      const c = clientes.find(item => item.id === id);
-      if (c) {
-        const novoStatus = (c.status === 'Cortado') ? 'Pendente' : 'Cortado';
-        await updateDoc(doc(db, "clientes", id), { status: novoStatus });
-      }
-    };
-
-    window.removerCliente = async function(id) {
-      if (confirm('Tem certeza que deseja excluir da nuvem?')) {
-        await deleteDoc(doc(db, "clientes", id));
-      }
-    };
-
-    window.exportarBackup = function() {
-      const blob = new Blob([JSON.stringify(clientes, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `backup_nuvem_netsolucoes_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    };
-
-    window.importarBackupParaNuvem = function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        try {
-          const dados = JSON.parse(e.target.result);
-          if (Array.isArray(dados)) {
-            const batch = writeBatch(db);
-            dados.forEach(item => {
-              const docRef = doc(db, "clientes", item.id ? String(item.id) : Date.now().toString() + Math.random().toString().slice(2,5));
-              batch.set(docRef, {
-                nome: item.nome || "",
-                ramal: item.ramal || "",
-                cto: item.cto || "",
-                dia: Number(item.dia) || 1,
-                valor: Number(item.valor) || 0,
-                status: item.status || "Pendente",
-                telefone: item.telefone || ""
-              });
-            });
-            await batch.commit();
-            alert('Todos os clientes foram salvos na nuvem com sucesso!');
-          }
-        } catch (err) {
-          alert('Erro ao enviar para o Firebase: ' + err.message);
-        }
-      };
-      reader.readAsText(file);
-    };
-  </script>
-
-  <!-- PWA Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(() => console.log('PWA Service Worker Ativo!'))
-          .catch((err) => console.error('Erro SW:', err));
-      });
-    }
-  </script>
-</body>
-</html>
+    <div class="bg-[#0f172a] border border-slate-8
