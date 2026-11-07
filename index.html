@@ -19,26 +19,22 @@
   </style>
 </head>
 <body class="pb-24">
-  <!-- Topo -->
   <header class="sticky top-0 z-40 bg-[#0b132b]/95 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
         <i class="fa-solid fa-tower-broadcast text-lg"></i>
       </div>
       <div>
         <h1 class="text-base font-bold text-white leading-tight">Netsoluções</h1>
-        <p class="text-[11px] text-cyan-400">Gestão Telecom</p>
+        <p class="text-xs text-cyan-400">Gestão Telecom</p>
       </div>
     </div>
-    <div class="flex items-center gap-1.5">
-      <button id="btnInstalarApp" onclick="acionarInstalacao()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-md shadow-emerald-600/30">
-        <i class="fa-solid fa-download"></i> Instalar
-      </button>
-      <button onclick="abrirModalCliente()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow-md shadow-cyan-600/30">
-        <i class="fa-solid fa-plus"></i> Novo
-      </button>
-      <button onclick="abrirConfig()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs">
+    <div class="flex items-center gap-2">
+      <button onclick="abrirConfig()" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center">
         <i class="fa-solid fa-gear"></i>
+      </button>
+      <button onclick="restaurarPadrao(true)" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-cyan-600/30">
+        <i class="fa-solid fa-arrows-rotate"></i> Recarregar
       </button>
     </div>
   </header>
@@ -87,60 +83,9 @@
       </div>
     </div>
 
-    <!-- Lista de Clientes -->
+    <!-- Lista -->
     <div id="containerClientes" class="space-y-2.5"></div>
   </main>
-
-  <!-- Modal Cadastro/Edição de Cliente -->
-  <div id="modalCliente" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-card bg-slate-900 rounded-2xl w-full max-w-sm p-4 space-y-3 border border-slate-700 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-        <h3 id="modalClienteTitulo" class="font-bold text-white text-sm">Editar Cliente</h3>
-        <button onclick="fecharModalCliente()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <input type="hidden" id="clienteId">
-      <div>
-        <label class="text-[11px] text-slate-400">Nome:</label>
-        <input type="text" id="cliNome" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-0.5">
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="text-[11px] text-slate-400">Ramal:</label>
-          <input type="text" id="cliRamal" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-0.5">
-        </div>
-        <div>
-          <label class="text-[11px] text-slate-400">CTO / Porta:</label>
-          <input type="text" id="cliCto" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-0.5">
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="text-[11px] text-slate-400">Vencimento:</label>
-          <input type="text" id="cliVencimento" placeholder="DD/MM/AAAA" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-0.5">
-        </div>
-        <div>
-          <label class="text-[11px] text-slate-400">Valor (R$):</label>
-          <input type="number" id="cliValor" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-0.5">
-        </div>
-      </div>
-      <div>
-        <label class="text-[11px] text-slate-400">WhatsApp (com DDD):</label>
-        <input type="text" id="cliFone" placeholder="Ex: 92999998888" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-0.5">
-      </div>
-      <div>
-        <label class="text-[11px] text-slate-400">Status:</label>
-        <select id="cliStatus" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-0.5">
-          <option value="Pago">Pago</option>
-          <option value="Aberto">Em Aberto</option>
-          <option value="Cortado">Cortado</option>
-        </select>
-      </div>
-      <div class="pt-2 flex gap-2">
-        <button onclick="salvarCliente()" class="flex-1 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-xs text-white font-bold">Salvar Dados</button>
-        <button id="btnExcluirCli" onclick="excluirCliente()" class="px-3 py-2 bg-rose-950/60 border border-rose-800 text-rose-300 rounded-lg text-xs font-semibold">Excluir</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Modal Config -->
   <div id="modalConfig" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
@@ -150,7 +95,7 @@
         <button onclick="fecharConfig()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div>
-        <label class="text-xs text-slate-400">Chave PIX de Cobrança:</label>
+        <label class="text-xs text-slate-400">Chave PIX:</label>
         <input type="text" id="configPix" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-1">
       </div>
       <div class="space-y-2 pt-2 border-t border-slate-800">
@@ -158,7 +103,7 @@
           <i class="fa-solid fa-download"></i> Baixar Backup (JSON)
         </button>
         <button onclick="restaurarPadrao(true)" class="w-full py-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/40 rounded-lg text-xs text-rose-300 font-semibold flex items-center justify-center gap-2">
-          <i class="fa-solid fa-rotate-left"></i> Restaurar Todos os 171 Clientes
+          <i class="fa-solid fa-rotate-left"></i> Forçar Recarga dos 170+ Clientes
         </button>
       </div>
       <button onclick="salvarConfig()" class="w-full py-2 bg-cyan-600 rounded-lg text-xs text-white font-bold">Salvar Configurações</button>
@@ -166,25 +111,7 @@
   </div>
 
   <script>
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const btn = document.getElementById('btnInstalarApp');
-      if (btn) btn.classList.remove('hidden');
-    });
-
-    function acionarInstalacao() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          deferredPrompt = null;
-        });
-      } else {
-        alert("Para instalar agora no Android:\n\n1. Toque nos 3 pontinhos (⋮) do Chrome no canto superior.\n2. Escolha 'Criar atalho' ou 'Instalar aplicativo'.\n3. Marque 'Abrir como janela' e confirme!");
-      }
-    }
-
+    // Manifesto PWA Dinamico
     (function() {
       const manifest = {
         name: "Netsoluções",
@@ -235,7 +162,7 @@
       { id: 25, ramal: "TARRAFINHA", nome: "Maria (Ana)", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
       { id: 26, ramal: "TARRAFINHA", nome: "Vinicius", cto: "CTO 7", vencimento: "06/11/2026", valor: 110, status: "Cortado", fone: "" },
 
-      // ASSEMBLEIA
+      // RAMAL ASSEMBLEIA
       { id: 27, ramal: "ASSEMBLEIA", nome: "Anamara", cto: "CTO 1", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
       { id: 28, ramal: "ASSEMBLEIA", nome: "William", cto: "CTO 1", vencimento: "22/11/2026", valor: 130, status: "Aberto", fone: "" },
       { id: 29, ramal: "ASSEMBLEIA", nome: "Railson", cto: "CTO 1", vencimento: "07/11/2026", valor: 150, status: "Aberto", fone: "" },
@@ -257,7 +184,7 @@
       { id: 45, ramal: "ASSEMBLEIA", nome: "Andreia", cto: "CTO 8", vencimento: "30/11/2026", valor: 110, status: "Pago", fone: "" },
       { id: 46, ramal: "ASSEMBLEIA", nome: "Liandra", cto: "CTO 8", vencimento: "07/11/2026", valor: 110, status: "Aberto", fone: "" },
 
-      // MANELITO
+      // RAMAL MANELITO
       { id: 47, ramal: "MANELITO", nome: "Caboclo", cto: "CTO 1", vencimento: "20/11/2026", valor: 130, status: "Aberto", fone: "" },
       { id: 48, ramal: "MANELITO", nome: "Emil", cto: "CTO 1", vencimento: "25/11/2026", valor: 130, status: "Cortado", fone: "" },
       { id: 49, ramal: "MANELITO", nome: "Acriziley(Daniele)", cto: "CTO 1", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone: "" },
@@ -269,4 +196,38 @@
       { id: 55, ramal: "MANELITO", nome: "Francielo", cto: "CTO 2", vencimento: "28/11/2026", valor: 130, status: "Aberto", fone: "" },
       { id: 56, ramal: "MANELITO", nome: "Gabriel", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
       { id: 57, ramal: "MANELITO", nome: "Renato", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Cortado", fone: "" },
-      { id: 58, ramal: "MANELITO", nome: "Francielam", cto: "CTO 3", vencimento: "22/11/2026", valor: 130, status: "Pago", fone: "" }
+      { id: 58, ramal: "MANELITO", nome: "Francielam", cto: "CTO 3", vencimento: "22/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 59, ramal: "MANELITO", nome: "Luziréne", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 60, ramal: "MANELITO", nome: "Mariangela", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 61, ramal: "MANELITO", nome: "Cristiane", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 62, ramal: "MANELITO", nome: "Wendel", cto: "CTO 4", vencimento: "21/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 63, ramal: "MANELITO", nome: "Railson 2", cto: "CTO 6", vencimento: "05/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 64, ramal: "MANELITO", nome: "Francisco", cto: "CTO 6", vencimento: "06/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 65, ramal: "MANELITO", nome: "Chirlane", cto: "CTO 7", vencimento: "28/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 66, ramal: "MANELITO", nome: "Cissa", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 67, ramal: "MANELITO", nome: "Chico", cto: "CTO 7", vencimento: "18/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 68, ramal: "MANELITO", nome: "Antônio", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 69, ramal: "MANELITO", nome: "Vânia", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Cortado", fone: "" },
+      { id: 70, ramal: "MANELITO", nome: "Ericassio", cto: "CTO 7", vencimento: "30/11/2026", valor: 110, status: "Pago", fone: "" },
+      { id: 71, ramal: "MANELITO", nome: "Rafaela", cto: "CTO 7", vencimento: "05/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 72, ramal: "MANELITO", nome: "Lucas", cto: "CTO 8", vencimento: "10/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 73, ramal: "MANELITO", nome: "Maria 2", cto: "CTO 8", vencimento: "04/11/2026", valor: 130, status: "Pago", fone: "" },
+
+      // RAMAL Prox.CCI
+      { id: 74, ramal: "Prox.CCI", nome: "Samira", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Cortado", fone: "" },
+      { id: 75, ramal: "Prox.CCI", nome: "Rodrigo3", cto: "CTO 4", vencimento: "10/11/2026", valor: 130, status: "Cortado", fone: "" },
+      { id: 76, ramal: "Prox.CCI", nome: "Daniel", cto: "CTO 4", vencimento: "28/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 77, ramal: "Prox.CCI", nome: "Sheila", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 78, ramal: "Prox.CCI", nome: "Clebson", cto: "CTO 8", vencimento: "24/11/2026", valor: 130, status: "Pago", fone: "" },
+
+      // CENTRO
+      { id: 79, ramal: "CENTRO", nome: "Moises-60", cto: "CTO 1", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "92993298611" },
+      { id: 80, ramal: "CENTRO", nome: "Moça Rafael", cto: "CTO 1", vencimento: "09/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 81, ramal: "CENTRO", nome: "Francisco pintor", cto: "CTO 2", vencimento: "01/11/2026", valor: 130, status: "Pago", fone: "97984617981" },
+      { id: 82, ramal: "CENTRO", nome: "Janaira", cto: "CTO 2", vencimento: "20/11/2026", valor: 130, status: "Cortado", fone: "92991834546" },
+      { id: 83, ramal: "CENTRO", nome: "Debora", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 84, ramal: "CENTRO", nome: "Wandreo", cto: "CTO 2", vencimento: "01/11/2026", valor: 100, status: "Pago", fone: "" },
+      { id: 85, ramal: "CENTRO", nome: "Josciane", cto: "CTO 2", vencimento: "04/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 86, ramal: "CENTRO", nome: "Augusto", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 87, ramal: "CENTRO", nome: "Ronilson 2", cto: "CTO 2", vencimento: "01/12/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 88, ramal: "CENTRO", nome: "Rozivaldo",
