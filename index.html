@@ -1,1225 +1,464 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0f172a">
+  <title>ISP Manager Pro - Netsoluções</title>
+  <meta name="theme-color" content="#0b132b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="ISP Manager">
-  <title>ISP Manager Pro - Gestão Telecom & Clientes</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0fdfa',
-              400: '#2dd4bf',
-              500: '#14b8a6',
-              600: '#0d9488',
-            },
-            darkBg: '#090d16',
-            darkSurface: '#0f172a',
-            darkCard: '#1e293b',
-            darkBorder: '#334155'
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #090d16;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 9999px;
-    }
+    body { background-color: #0b132b; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    .glass-card { background: rgba(28, 37, 65, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .status-pago { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .status-aberto { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .status-cortado { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
   </style>
-
-  <!-- Injeção Dinâmica de Web App Manifest via Data URI com Ícone SVG -->
-  <script>
-    (function setupPwaManifest() {
-      const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs><rect width="512" height="512" rx="110" fill="#0f172a"/><path d="M256 96c-88.37 0-160 71.63-160 160 0 45.47 18.99 86.53 49.54 115.68l22.75-22.75C143.19 324.97 128 292.29 128 256c0-70.69 57.31-128 128-128s128 57.31 128 128c0 36.29-15.19 68.97-39.71 92.93l22.75 22.75C397.01 342.53 416 301.47 416 256c0-88.37-71.63-160-160-160z" fill="url(#g)"/><path d="M256 160c-53.02 0-96 42.98-96 96 0 27.09 11.23 51.58 29.35 69.04l22.65-22.65C199.34 290.04 192 273.88 192 256c0-35.35 28.65-64 64-64s64 28.65 64 64c0 17.88-7.34 34.04-19.42 46.39l22.65 22.65C340.77 307.58 352 283.09 352 256c0-53.02-42.98-96-96-96z" fill="url(#g)"/><circle cx="256" cy="256" r="32" fill="#38bdf8"/><path d="M240 288h32v144h-32z" fill="#06b6d4" rx="16"/></svg>`;
-      const iconUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(iconSvg);
-
-      const manifestObj = {
-        name: "ISP Manager Pro - Gerenciamento Telecom",
-        short_name: "ISP Manager",
-        description: "Painel de controle de clientes, ramais, CTOs e cobrança WhatsApp para provedores.",
-        start_url: window.location.pathname || "./",
-        display: "standalone",
-        orientation: "portrait-primary",
-        background_color: "#090d16",
-        theme_color: "#0f172a",
-        icons: [
-          {
-            src: iconUrl,
-            sizes: "192x192 512x512",
-            type: "image/svg+xml",
-            purpose: "any maskable"
-          }
-        ]
-      };
-
-      const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/json' });
-      const manifestLink = document.createElement('link');
-      manifestLink.rel = 'manifest';
-      manifestLink.href = URL.createObjectURL(manifestBlob);
-      document.head.appendChild(manifestLink);
-
-      // Ícone para Apple / Safari
-      const appleTouchIcon = document.createElement('link');
-      appleTouchIcon.rel = 'apple-touch-icon';
-      appleTouchIcon.href = iconUrl;
-      document.head.appendChild(appleTouchIcon);
-
-      const favicon = document.createElement('link');
-      favicon.rel = 'icon';
-      favicon.href = iconUrl;
-      document.head.appendChild(favicon);
-    })();
-  </script>
 </head>
-<body class="bg-[#090d16] text-slate-100 min-h-screen flex flex-col antialiased">
-
-  <!-- Banner de Instalação do PWA (Disparado quando suportado pelo navegador mobile) -->
-  <div id="pwaInstallBanner" class="hidden bg-gradient-to-r from-blue-700 via-indigo-700 to-emerald-600 px-4 py-3 text-white shadow-xl flex items-center justify-between z-50 sticky top-0 transition-all">
-    <div class="flex items-center space-x-3">
-      <div class="w-9 h-9 rounded-xl bg-slate-900/40 backdrop-blur-sm flex items-center justify-center text-emerald-300">
-        <i class="fa-solid fa-mobile-screen-button text-lg"></i>
+<body class="pb-24">
+  <!-- Topo -->
+  <header class="sticky top-0 z-40 bg-[#0b132b]/95 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
+        <i class="fa-solid fa-tower-broadcast text-lg"></i>
       </div>
       <div>
-        <h4 class="text-xs sm:text-sm font-bold tracking-tight">Instalar ISP Manager Pro</h4>
-        <p class="text-[11px] text-emerald-100 opacity-90">Acesse diretamente da tela inicial do celular!</p>
+        <h1 class="text-base font-bold text-white leading-tight">ISP Manager</h1>
+        <p class="text-xs text-cyan-400">Netsoluções Telecom</p>
       </div>
     </div>
-    <div class="flex items-center space-x-2">
-      <button onclick="triggerPwaInstall()" class="px-3.5 py-1.5 bg-white text-slate-900 rounded-lg text-xs font-bold hover:bg-slate-100 shadow transition active:scale-95">
-        Instalar
+    <div class="flex items-center gap-2">
+      <button onclick="abrirConfig()" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center">
+        <i class="fa-solid fa-gear"></i>
       </button>
-      <button onclick="dismissInstallBanner()" class="text-white/80 hover:text-white p-1 text-sm">
-        <i class="fa-solid fa-xmark"></i>
+      <button onclick="abrirModalCliente()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-cyan-600/30">
+        <i class="fa-solid fa-plus"></i> Novo
       </button>
-    </div>
-  </div>
-
-  <!-- Barra Superior / Header -->
-  <header class="bg-[#0f172a] border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md bg-opacity-90">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      
-      <!-- Marca e Status Online -->
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-500 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-cyan-500/20">
-          <i class="fa-solid fa-wifi text-base text-slate-900"></i>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white leading-tight">ISP Manager</h1>
-            <!-- Indicador Online / Offline -->
-            <span id="connectionBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span id="connectionText">Online</span>
-            </span>
-          </div>
-          <p class="text-[11px] text-slate-400 truncate max-w-[200px] sm:max-w-none">Rede Metro • Vencimentos & WhatsApp</p>
-        </div>
-      </div>
-
-      <!-- Ações do Cabeçalho -->
-      <div class="flex items-center space-x-2">
-        <!-- Botão Instalar manual -->
-        <button id="headerInstallBtn" onclick="triggerPwaInstall()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30 transition">
-          <i class="fa-solid fa-circle-down"></i> Instalar App
-        </button>
-
-        <!-- Menu de Backup / Configurações -->
-        <button onclick="openConfigModal()" title="Configurações & Backup" class="p-2 text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-sm transition">
-          <i class="fa-solid fa-gear"></i>
-        </button>
-
-        <!-- Botão Adicionar Cliente -->
-        <button onclick="openClientModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/25 transition active:scale-95">
-          <i class="fa-solid fa-plus text-xs"></i> <span class="hidden sm:inline">Novo</span> Cliente
-        </button>
-      </div>
     </div>
   </header>
 
-  <!-- Container Principal -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 space-y-5">
-
-    <!-- Cards de Métricas e Balanço -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      <!-- Total Clientes -->
-      <div class="bg-[#0f172a] border border-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm relative overflow-hidden group">
-        <div class="absolute -right-2 -bottom-2 opacity-5 text-slate-100 group-hover:opacity-10 transition">
-          <i class="fa-solid fa-users text-6xl"></i>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Clientes Total</span>
-          <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-users"></i>
-          </span>
-        </div>
-        <h3 id="statTotalClients" class="text-xl sm:text-2xl font-black text-white mt-1">0</h3>
-        <p id="statActiveSub" class="text-[11px] text-emerald-400 font-medium mt-0.5">Em dia: 0</p>
+  <main class="max-w-5xl mx-auto px-4 py-4 space-y-4">
+    <!-- Métricas -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+      <div class="glass-card rounded-xl p-3">
+        <span class="text-[11px] font-semibold text-slate-400 uppercase">Clientes</span>
+        <div id="statTotalClientes" class="text-xl font-bold text-white mt-1">0</div>
+        <div id="statEmDia" class="text-[10px] text-emerald-400 mt-0.5">0 pagos</div>
       </div>
-
-      <!-- Recebido no Mês -->
-      <div class="bg-[#0f172a] border border-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm relative overflow-hidden group">
-        <div class="absolute -right-2 -bottom-2 opacity-5 text-emerald-400 group-hover:opacity-10 transition">
-          <i class="fa-solid fa-circle-check text-6xl"></i>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Recebido</span>
-          <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-hand-holding-dollar"></i>
-          </span>
-        </div>
-        <h3 id="statTotalReceived" class="text-xl sm:text-2xl font-black text-emerald-400 mt-1">R$ 0,00</h3>
-        <p id="statPaidCount" class="text-[11px] text-slate-400 font-medium mt-0.5">0 pagamentos</p>
+      <div class="glass-card rounded-xl p-3">
+        <span class="text-[11px] font-semibold text-slate-400 uppercase">Recebido</span>
+        <div id="statTotalPago" class="text-xl font-bold text-emerald-400 mt-1">R$ 0</div>
+        <div id="statCountPago" class="text-[10px] text-slate-400 mt-0.5">0 quitações</div>
       </div>
-
-      <!-- Em Aberto / A Receber -->
-      <div class="bg-[#0f172a] border border-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm relative overflow-hidden group">
-        <div class="absolute -right-2 -bottom-2 opacity-5 text-amber-400 group-hover:opacity-10 transition">
-          <i class="fa-solid fa-clock text-6xl"></i>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">A Receber</span>
-          <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-hourglass-half"></i>
-          </span>
-        </div>
-        <h3 id="statTotalPending" class="text-xl sm:text-2xl font-black text-amber-400 mt-1">R$ 0,00</h3>
-        <p id="statPendingCount" class="text-[11px] text-slate-400 font-medium mt-0.5">0 pendências</p>
+      <div class="glass-card rounded-xl p-3">
+        <span class="text-[11px] font-semibold text-slate-400 uppercase">A Receber</span>
+        <div id="statTotalAberto" class="text-xl font-bold text-amber-400 mt-1">R$ 0</div>
+        <div id="statCountAberto" class="text-[10px] text-amber-400/80 mt-0.5">0 em aberto</div>
       </div>
-
-      <!-- Inadimplentes / Vencidos -->
-      <div class="bg-[#0f172a] border border-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm relative overflow-hidden group">
-        <div class="absolute -right-2 -bottom-2 opacity-5 text-rose-500 group-hover:opacity-10 transition">
-          <i class="fa-solid fa-triangle-exclamation text-6xl"></i>
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Atraso / Cortado</span>
-          <span class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-ban"></i>
-          </span>
-        </div>
-        <h3 id="statTotalOverdue" class="text-xl sm:text-2xl font-black text-rose-500 mt-1">R$ 0,00</h3>
-        <p id="statOverdueCount" class="text-[11px] text-rose-400/90 font-medium mt-0.5">0 faturas vencidas</p>
+      <div class="glass-card rounded-xl p-3">
+        <span class="text-[11px] font-semibold text-slate-400 uppercase">Cortados</span>
+        <div id="statTotalCortado" class="text-xl font-bold text-rose-400 mt-1">R$ 0</div>
+        <div id="statCountCortado" class="text-[10px] text-rose-400/80 mt-0.5">0 bloqueados</div>
       </div>
     </div>
 
-    <!-- Barra de Filtros e Busca Rápida -->
-    <div class="bg-[#0f172a] border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm space-y-3">
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-        
-        <!-- Campo de Pesquisa -->
-        <div class="relative flex-1">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500">
-            <i class="fa-solid fa-magnifying-glass text-xs"></i>
-          </span>
-          <input type="text" id="searchInput" oninput="renderData()" placeholder="Buscar cliente, CTO ou WhatsApp..." 
-            class="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-        </div>
-
-        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
-          <!-- Filtro Ramal -->
-          <select id="filterRamal" onchange="renderData()" class="w-full sm:w-auto bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-cyan-500 outline-none">
-            <option value="ALL">Todos os Ramais</option>
-          </select>
-
-          <!-- Filtro Status -->
-          <select id="filterStatus" onchange="renderData()" class="w-full sm:w-auto bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-cyan-500 outline-none">
-            <option value="ALL">Todos Status</option>
-            <option value="Pago">Pago</option>
-            <option value="Pendente">Em Aberto</option>
-            <option value="Cortado">Cortado</option>
-            <option value="Vencida">Vencidos</option>
-          </select>
-        </div>
+    <!-- Barra de Pesquisa e Filtros -->
+    <div class="glass-card rounded-xl p-3 space-y-2.5">
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+        <input type="text" id="inputBusca" oninput="renderizar()" placeholder="Buscar cliente, CTO ou WhatsApp..." class="w-full bg-slate-900/90 border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500">
       </div>
-
-      <!-- Botões de Troca de Visualização (Cards Mobile vs Tabela Compacta) -->
-      <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-800/80">
-        <span id="filteredCountBadge" class="text-slate-400 font-medium">Carregando registros...</span>
-        <div class="flex items-center gap-1.5">
-          <span class="text-slate-500 text-[11px] mr-1 hidden sm:inline">Exibição:</span>
-          <button id="viewCardBtn" onclick="switchView('card')" class="px-2.5 py-1 rounded-lg bg-cyan-600 text-white font-semibold flex items-center gap-1 transition">
-            <i class="fa-solid fa-grip"></i> Cards
-          </button>
-          <button id="viewTableBtn" onclick="switchView('table')" class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition">
-            <i class="fa-solid fa-table-list"></i> Tabela
-          </button>
-        </div>
+      <div class="grid grid-cols-2 gap-2">
+        <select id="filtroRamal" onchange="renderizar()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none">
+          <option value="">Todos os Ramais</option>
+        </select>
+        <select id="filtroStatus" onchange="renderizar()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none">
+          <option value="">Todos os Status</option>
+          <option value="Pago">Pago</option>
+          <option value="Aberto">Em Aberto</option>
+          <option value="Cortado">Cortado</option>
+        </select>
       </div>
     </div>
 
-    <!-- Lista em Cards (Mobile First) -->
-    <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-      <!-- Injetado dinamicamente via JavaScript -->
-    </div>
-
-    <!-- Tabela Compacta (Ideal para Desktop ou visualização tradicional) -->
-    <div id="tableContainer" class="hidden bg-[#0f172a] border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs whitespace-nowrap">
-          <thead class="bg-slate-950 text-slate-400 font-semibold border-b border-slate-800 uppercase tracking-wider">
-            <tr>
-              <th scope="col" class="py-3 px-4">Cliente</th>
-              <th scope="col" class="py-3 px-3">Ramal / CTO</th>
-              <th scope="col" class="py-3 px-3">Vencimento</th>
-              <th scope="col" class="py-3 px-3">Valor</th>
-              <th scope="col" class="py-3 px-3">Status</th>
-              <th scope="col" class="py-3 px-3">Atraso</th>
-              <th scope="col" class="py-3 px-3 text-center">Cobrança</th>
-              <th scope="col" class="py-3 px-4 text-right">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody" class="divide-y divide-slate-800 text-slate-300">
-            <!-- Linhas dinâmicas -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
+    <!-- Lista de Clientes -->
+    <div id="containerClientes" class="space-y-2.5"></div>
   </main>
 
-  <!-- Rodapé Simples -->
-  <footer class="bg-[#090d16] border-t border-slate-800/80 py-4 text-center text-xs text-slate-500">
-    <p>ISP Manager Pro PWA • Salvo 100% no Dispositivo • Operação Offline</p>
-  </footer>
-
-  <!-- Modal Adicionar / Editar Cliente -->
-  <div id="clientModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm hidden overflow-y-auto">
-    <div class="bg-[#0f172a] border border-slate-700 w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl relative my-8">
-      <button onclick="closeClientModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <h3 id="modalTitle" class="text-base sm:text-lg font-bold text-white mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-user-plus text-cyan-400"></i> Novo Cliente
-      </h3>
-
-      <form id="clientForm" onsubmit="saveClient(event)" class="space-y-3.5 text-xs sm:text-sm">
-        <input type="hidden" id="editClientId">
-
-        <div>
-          <label class="block text-slate-400 mb-1 font-medium">Nome do Cliente *</label>
-          <input type="text" id="formName" required placeholder="Ex: Roberto Silva" 
-            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-slate-400 mb-1 font-medium">Ramal / Rede *</label>
-            <input type="text" id="formRamal" required list="ramaisList" placeholder="Selecione ou digite..." 
-              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-            <datalist id="ramaisList"></datalist>
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-medium">CTO / Porta *</label>
-            <input type="text" id="formCto" required placeholder="Ex: CTO 03 - P05" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-slate-400 mb-1 font-medium">Data Vencimento *</label>
-            <input type="date" id="formDueDate" required 
-              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-medium">Mensalidade (R$) *</label>
-            <input type="number" step="0.01" id="formAmount" required placeholder="130.00" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1 font-medium">WhatsApp / Tel</label>
-            <input type="text" id="formPhone" placeholder="Ex: 82991234567" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-slate-400 mb-1 font-medium">Status de Cobrança</label>
-            <select id="formStatus" onchange="togglePaymentDateInput()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-              <option value="Pago">Pago [ ✔ ]</option>
-              <option value="Pendente" selected>Pendente / Em Aberto [ ⏳ ]</option>
-              <option value="Cortado">Cortado [ ✖ ]</option>
-            </select>
-          </div>
-          <div id="paymentDateGroup">
-            <label class="block text-slate-400 mb-1 font-medium">Data do Pagamento</label>
-            <input type="date" id="formPaymentDate" 
-              class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-          </div>
-        </div>
-
-        <div class="pt-4 flex items-center justify-end space-x-2 border-t border-slate-800">
-          <button type="button" onclick="closeClientModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Cancelar</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 text-white font-bold shadow-md transition">Salvar Dados</button>
-        </div>
-      </form>
+  <!-- Modal Configurações -->
+  <div id="modalConfig" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card bg-slate-900 rounded-2xl w-full max-w-sm p-4 space-y-4 border border-slate-700">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-white text-sm">Configurações & Backup</h3>
+        <button onclick="fecharConfig()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div>
+        <label class="text-xs text-slate-400">Chave PIX de Cobrança:</label>
+        <input type="text" id="configPix" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white mt-1">
+      </div>
+      <div class="space-y-2 pt-2 border-t border-slate-800">
+        <button onclick="exportarBackup()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs text-cyan-400 font-semibold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-download"></i> Baixar Backup (JSON)
+        </button>
+        <button onclick="restaurarPadrao()" class="w-full py-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/40 rounded-lg text-xs text-rose-300 font-semibold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate-left"></i> Restaurar Todos os Clientes
+        </button>
+      </div>
+      <button onclick="salvarConfig()" class="w-full py-2 bg-cyan-600 rounded-lg text-xs text-white font-bold">Salvar Configurações</button>
     </div>
   </div>
 
-  <!-- Modal de Configurações, PIX e Backup -->
-  <div id="configModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm hidden overflow-y-auto">
-    <div class="bg-[#0f172a] border border-slate-700 w-full max-w-lg rounded-2xl p-5 sm:p-6 shadow-2xl relative my-8 space-y-5">
-      <button onclick="closeConfigModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-        <i class="fa-solid fa-sliders text-cyan-400"></i> Configurações & Backup
-      </h3>
-
-      <!-- Seção PIX -->
-      <div class="space-y-3 bg-slate-900/70 p-3.5 rounded-xl border border-slate-800">
-        <h4 class="text-xs uppercase font-bold text-emerald-400 tracking-wider flex items-center gap-1.5">
-          <i class="fa-brands fa-pix"></i> Chave PIX da Empresa
-        </h4>
-        <div class="space-y-2 text-xs">
-          <div>
-            <label class="block text-slate-400 mb-1">Chave PIX (Telefone, CNPJ, E-mail ou Aleatória)</label>
-            <input type="text" id="pixKeyInput" placeholder="Ex: 82991780727 ou contato@provedor.com" 
-              class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-          </div>
-          <div>
-            <label class="block text-slate-400 mb-1">Nome do Titular / Provedor</label>
-            <input type="text" id="pixNameInput" placeholder="Ex: Rede Metro Telecom" 
-              class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-cyan-500 outline-none">
-          </div>
-        </div>
-      </div>
-
-      <!-- Seção Backup Local -->
-      <div class="space-y-3 bg-slate-900/70 p-3.5 rounded-xl border border-slate-800">
-        <h4 class="text-xs uppercase font-bold text-cyan-400 tracking-wider flex items-center gap-1.5">
-          <i class="fa-solid fa-database"></i> Backup & Restauração de Dados
-        </h4>
-        <p class="text-[11px] text-slate-400">Exporte os dados para nunca perder suas informações ou transfira facilmente para outro celular.</p>
-        <div class="flex flex-wrap items-center gap-2 pt-1">
-          <button onclick="exportBackupData()" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold border border-slate-700 transition">
-            <i class="fa-solid fa-download text-cyan-400"></i> Exportar Arquivo
-          </button>
-          <label class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold border border-slate-700 cursor-pointer transition">
-            <i class="fa-solid fa-upload text-emerald-400"></i> Importar Backup
-            <input type="file" id="importFileInput" accept=".json" onchange="importBackupData(event)" class="hidden">
-          </label>
-        </div>
-      </div>
-
-      <!-- Resetar Dados Padrão -->
-      <div class="flex items-center justify-between pt-2">
-        <button onclick="resetDefaultData()" class="text-xs text-rose-400 hover:text-rose-300 underline">
-          Restaurar Dados da Planilha Modelo
-        </button>
-        <button onclick="saveConfigurations()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-xl shadow transition">
-          Salvar Configurações
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-80 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl text-white transform transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
-    <i id="toastIcon" class="fa-solid"></i>
-    <span id="toastMsg" class="text-xs sm:text-sm font-medium leading-tight"></span>
-  </div>
-
-  <!-- Registrador de Service Worker Embutido para Operação 100% Offline -->
   <script>
-    (function registerInlineServiceWorker() {
-      if ('serviceWorker' in navigator) {
-        // Código do Service Worker executado isolado em cache
-        const swScript = `
-          const CACHE_NAME = 'isp-manager-cache-v2';
-          self.addEventListener('install', (event) => {
-            self.skipWaiting();
-          });
-          self.addEventListener('activate', (event) => {
-            event.waitUntil(clients.claim());
-          });
-          self.addEventListener('fetch', (event) => {
-            // Estratégia Stale-While-Revalidate para funcionamento offline contínuo
-            event.respondWith(
-              caches.match(event.request).then((cachedResponse) => {
-                const fetchPromise = fetch(event.request).then((networkResponse) => {
-                  if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
-                    const responseClone = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-                  }
-                  return networkResponse;
-                }).catch(() => cachedResponse);
-                return cachedResponse || fetchPromise;
-              })
-            );
-          });
-        `;
+    const CLIENTES_PADRAO = [
+      // 2. TARRAFINHA (R104)
+      { id: 1, ramal: "TARRAFINHA (R104)", nome: "Ariadna", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "92991780727", pagoEm: "02/11/2026" },
+      { id: 2, ramal: "TARRAFINHA (R104)", nome: "Rose", cto: "CTO 2", vencimento: "03/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 3, ramal: "TARRAFINHA (R104)", nome: "Gessiane", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 4, ramal: "TARRAFINHA (R104)", nome: "Marilene", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "97991521046", pagoEm: "30/10/2026" },
+      { id: 5, ramal: "TARRAFINHA (R104)", nome: "Tainá", cto: "CTO 3", vencimento: "28/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "04/11/2026" },
+      { id: 6, ramal: "TARRAFINHA (R104)", nome: "Franck", cto: "CTO 4", vencimento: "16/11/2026", valor: 130, status: "Pago", fone: "92993768055", pagoEm: "16/10/2026" },
+      { id: 7, ramal: "TARRAFINHA (R104)", nome: "Emergência", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 8, ramal: "TARRAFINHA (R104)", nome: "Emergência-H", cto: "CTO 4", vencimento: "30/11/2026", valor: 150, status: "Pago", fone: "97991960429", pagoEm: "31/10/2026" },
+      { id: 9, ramal: "TARRAFINHA (R104)", nome: "Neide", cto: "CTO 4", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone: "92992697429", pagoEm: "" },
+      { id: 10, ramal: "TARRAFINHA (R104)", nome: "Charle", cto: "CTO 4", vencimento: "04/11/2026", valor: 130, status: "Aberto", fone: "92991619665", pagoEm: "" },
+      { id: 11, ramal: "TARRAFINHA (R104)", nome: "Jasinei", cto: "CTO 4", vencimento: "02/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 12, ramal: "TARRAFINHA (R104)", nome: "Pescador", cto: "CTO 4", vencimento: "06/11/2026", valor: 150, status: "Pago", fone: "", pagoEm: "06/10/2026" },
+      { id: 13, ramal: "TARRAFINHA (R104)", nome: "Doca", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "97991877705", pagoEm: "03/11/2026" },
+      { id: 14, ramal: "TARRAFINHA (R104)", nome: "Edno", cto: "CTO 5", vencimento: "08/11/2026", valor: 130, status: "Aberto", fone: "92994856012", pagoEm: "" },
+      { id: 15, ramal: "TARRAFINHA (R104)", nome: "Ary", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "97984104142", pagoEm: "" },
+      { id: 16, ramal: "TARRAFINHA (R104)", nome: "Barroso", cto: "CTO 5", vencimento: "14/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 17, ramal: "TARRAFINHA (R104)", nome: "Rodrigo2", cto: "CTO 5", vencimento: "04/11/2026", valor: 130, status: "Aberto", fone: "97991350196", pagoEm: "" },
+      { id: 18, ramal: "TARRAFINHA (R104)", nome: "Raimundo Bur", cto: "CTO 6", vencimento: "04/11/2026", valor: 130, status: "Pago", fone: "97984081330", pagoEm: "03/11/2026" },
+      { id: 19, ramal: "TARRAFINHA (R104)", nome: "Patricia", cto: "CTO 6", vencimento: "07/09/2153", valor: 130, status: "Pago", fone: "92992893926", pagoEm: "05/11/2026" },
+      { id: 20, ramal: "TARRAFINHA (R104)", nome: "Fernanda2", cto: "CTO 6", vencimento: "03/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 21, ramal: "TARRAFINHA (R104)", nome: "Gilmar", cto: "CTO 6", vencimento: "03/11/2026", valor: 110, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 22, ramal: "TARRAFINHA (R104)", nome: "Falcão (Janders", cto: "CTO 6", vencimento: "08/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 23, ramal: "TARRAFINHA (R104)", nome: "Thais", cto: "CTO 6", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "29/10/2026" },
+      { id: 24, ramal: "TARRAFINHA (R104)", nome: "Betha", cto: "CTO 7", vencimento: "06/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 25, ramal: "TARRAFINHA (R104)", nome: "Maria (Ana)", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 26, ramal: "TARRAFINHA (R104)", nome: "Vinicius", cto: "CTO 7", vencimento: "06/11/2026", valor: 110, status: "Cortado", fone: "", pagoEm: "" },
 
-        const swBlob = new Blob([swScript], { type: 'application/javascript' });
-        const swUrl = URL.createObjectURL(swBlob);
+      // 4. RAMAL ASSEMBLEIA
+      { id: 27, ramal: "RAMAL ASSEMBLEIA", nome: "Anamara", cto: "CTO 1", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "28/10/2026" },
+      { id: 28, ramal: "RAMAL ASSEMBLEIA", nome: "William", cto: "CTO 1", vencimento: "22/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 29, ramal: "RAMAL ASSEMBLEIA", nome: "Railson", cto: "CTO 1", vencimento: "07/11/2026", valor: 150, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 30, ramal: "RAMAL ASSEMBLEIA", nome: "Leandro 2", cto: "CTO 4", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 31, ramal: "RAMAL ASSEMBLEIA", nome: "Erlane Rai", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 32, ramal: "RAMAL ASSEMBLEIA", nome: "Aqueles", cto: "CTO 5", vencimento: "04/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 33, ramal: "RAMAL ASSEMBLEIA", nome: "Felipe", cto: "CTO 5", vencimento: "27/11/2026", valor: 100, status: "Pago", fone: "", pagoEm: "27/10/2026" },
+      { id: 34, ramal: "RAMAL ASSEMBLEIA", nome: "Lene Laborda", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "28/10/2026" },
+      { id: 35, ramal: "RAMAL ASSEMBLEIA", nome: "Sheila", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 36, ramal: "RAMAL ASSEMBLEIA", nome: "Mateus", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "04/11/2026" },
+      { id: 37, ramal: "RAMAL ASSEMBLEIA", nome: "Elionete", cto: "CTO 5", vencimento: "01/11/2026", valor: 180, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 38, ramal: "RAMAL ASSEMBLEIA", nome: "Aryanne", cto: "CTO 6", vencimento: "20/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 39, ramal: "RAMAL ASSEMBLEIA", nome: "Afonso", cto: "CTO 6", vencimento: "10/11/2026", valor: 100, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 40, ramal: "RAMAL ASSEMBLEIA", nome: "Karina", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 41, ramal: "RAMAL ASSEMBLEIA", nome: "Francieliton", cto: "CTO 7", vencimento: "06/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 42, ramal: "RAMAL ASSEMBLEIA", nome: "Damares", cto: "CTO 7", vencimento: "17/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 43, ramal: "RAMAL ASSEMBLEIA", nome: "Solange Marque", cto: "CTO 7", vencimento: "01/11/2026", valor: 110, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 44, ramal: "RAMAL ASSEMBLEIA", nome: "Ronilson", cto: "CTO 8", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "31/10/2026" },
+      { id: 45, ramal: "RAMAL ASSEMBLEIA", nome: "Andreia", cto: "CTO 8", vencimento: "30/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 46, ramal: "RAMAL ASSEMBLEIA", nome: "Liandra", cto: "CTO 8", vencimento: "07/11/2026", valor: 110, status: "Aberto", fone: "", pagoEm: "" },
 
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register(swUrl)
-            .then(() => console.log('Service Worker PWA ativado com sucesso.'))
-            .catch((err) => console.log('SW registration note:', err));
-        });
-      }
-    })();
-  </script>
+      // 4. RAMAL MANELITO
+      { id: 47, ramal: "RAMAL MANELITO", nome: "Caboclo", cto: "CTO 1", vencimento: "20/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 48, ramal: "RAMAL MANELITO", nome: "Emil", cto: "CTO 1", vencimento: "25/11/2026", valor: 130, status: "Cortado", fone: "", pagoEm: "" },
+      { id: 49, ramal: "RAMAL MANELITO", nome: "Acriziley(Daniele", cto: "CTO 1", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 50, ramal: "RAMAL MANELITO", nome: "ONU-Tony", cto: "CTO 2", vencimento: "15/11/2026", valor: 130, status: "Pago", fone: "9791658184", pagoEm: "26/10/2026" },
+      { id: 51, ramal: "RAMAL MANELITO", nome: "Adriano", cto: "CTO 2", vencimento: "25/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "27/10/2026" },
+      { id: 52, ramal: "RAMAL MANELITO", nome: "Elineide", cto: "CTO 2", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "02/11/2026" },
+      { id: 53, ramal: "RAMAL MANELITO", nome: "Joaquim", cto: "CTO 2", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 54, ramal: "RAMAL MANELITO", nome: "Fuscão Aquino", cto: "CTO 2", vencimento: "28/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 55, ramal: "RAMAL MANELITO", nome: "Francielo", cto: "CTO 2", vencimento: "28/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 56, ramal: "RAMAL MANELITO", nome: "Gabriel", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 57, ramal: "RAMAL MANELITO", nome: "Renato", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Cortado", fone: "", pagoEm: "" },
+      { id: 58, ramal: "RAMAL MANELITO", nome: "Francielam", cto: "CTO 3", vencimento: "22/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "22/10/2026" },
+      { id: 59, ramal: "RAMAL MANELITO", nome: "Luziréne", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 60, ramal: "RAMAL MANELITO", nome: "Mariangela", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 61, ramal: "RAMAL MANELITO", nome: "Cristiane", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 62, ramal: "RAMAL MANELITO", nome: "Wendel", cto: "CTO 4", vencimento: "21/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 63, ramal: "RAMAL MANELITO", nome: "Railson 2", cto: "CTO 6", vencimento: "05/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 64, ramal: "RAMAL MANELITO", nome: "Francisco", cto: "CTO 6", vencimento: "06/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 65, ramal: "RAMAL MANELITO", nome: "Chirlane", cto: "CTO 7", vencimento: "28/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 66, ramal: "RAMAL MANELITO", nome: "Cissa", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 67, ramal: "RAMAL MANELITO", nome: "Chico", cto: "CTO 7", vencimento: "18/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 68, ramal: "RAMAL MANELITO", nome: "Antônio", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 69, ramal: "RAMAL MANELITO", nome: "Vânia", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Cortado", fone: "", pagoEm: "" },
+      { id: 70, ramal: "RAMAL MANELITO", nome: "Ericassio", cto: "CTO 7", vencimento: "30/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 71, ramal: "RAMAL MANELITO", nome: "Rafaela", cto: "CTO 7", vencimento: "05/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 72, ramal: "RAMAL MANELITO", nome: "Lucas", cto: "CTO 8", vencimento: "10/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "12/10/2026" },
+      { id: 73, ramal: "RAMAL MANELITO", nome: "Maria 2", cto: "CTO 8", vencimento: "04/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "04/11/2026" },
 
-  <!-- Lógica Principal da Aplicação -->
-  <script>
-    // Armazenamento das chaves
-    const STORAGE_KEY_CLIENTS = 'isp_manager_clients_db';
-    const STORAGE_KEY_CONFIG = 'isp_manager_config';
-    const STORAGE_KEY_VIEW = 'isp_manager_view_mode';
+      // 4. RAMAL Prox.CCI
+      { id: 74, ramal: "RAMAL Prox.CCI", nome: "Samira", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Cortado", fone: "", pagoEm: "" },
+      { id: 75, ramal: "RAMAL Prox.CCI", nome: "Rodrigo3", cto: "CTO 4", vencimento: "10/11/2026", valor: 130, status: "Cortado", fone: "", pagoEm: "" },
+      { id: 76, ramal: "RAMAL Prox.CCI", nome: "Daniel", cto: "CTO 4", vencimento: "28/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "06/11/2026" },
+      { id: 77, ramal: "RAMAL Prox.CCI", nome: "Sheila", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "31/10/2026" },
+      { id: 78, ramal: "RAMAL Prox.CCI", nome: "Clebson", cto: "CTO 8", vencimento: "24/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
 
-    // Lista inicial extraída e modelada a partir da planilha operacional
-    const DEFAULT_CLIENTS = [
-      { id: '1', name: 'Ariadna', ramal: 'TARRAFINHA (R104)', cto: 'CTO 2', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '82991780727', paymentDate: '2026-11-02' },
-      { id: '2', name: 'Roso', ramal: 'TARRAFINHA (R104)', cto: 'CTO 2', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '', paymentDate: '2026-11-03' },
-      { id: '3', name: 'Gessiane', ramal: 'TARRAFINHA (R104)', cto: 'CTO 2', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '', paymentDate: '2026-10-30' },
-      { id: '4', name: 'Marilene', ramal: 'TARRAFINHA (R104)', cto: 'CTO 3', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '82991521045', paymentDate: '2026-10-30' },
-      { id: '5', name: 'Tainá', ramal: 'TARRAFINHA (R104)', cto: 'CTO 3', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '', paymentDate: '2026-11-04' },
-      { id: '6', name: 'Piaió', ramal: 'TARRAFINHA (R104)', cto: 'CTO 4', dueDate: '2026-11-10', status: 'Pago', amount: 130.00, phone: '82993788355', paymentDate: '2026-10-19' },
-      { id: '7', name: 'Emergência', ramal: 'TARRAFINHA (R104)', cto: 'CTO 4', dueDate: '2026-11-20', status: 'Pago', amount: 150.00, phone: '', paymentDate: '2026-11-03' },
-      { id: '8', name: 'Emergência K', ramal: 'TARRAFINHA (R104)', cto: 'CTO 4', dueDate: '2026-11-20', status: 'Pago', amount: 150.00, phone: '82991060429', paymentDate: '2026-10-21' },
-      { id: '9', name: 'Nado', ramal: 'TARRAFINHA (R104)', cto: 'CTO 4', dueDate: '2026-11-07', status: 'Pendente', amount: 130.00, phone: '82993697429', paymentDate: '' },
-      { id: '10', name: 'Charlie', ramal: 'TARRAFINHA (R104)', cto: 'CTO 4', dueDate: '2026-11-04', status: 'Pendente', amount: 130.00, phone: '82991618685', paymentDate: '' },
-      { id: '11', name: 'Jucinei', ramal: 'TARRAFINHA (R104)', cto: 'CTO 4', dueDate: '2026-11-02', status: 'Pago', amount: 130.00, phone: '', paymentDate: '2026-11-01' },
-      { id: '12', name: 'Pescador', ramal: 'TARRAFINHA (R104)', cto: 'CTO 4', dueDate: '2026-11-05', status: 'Pago', amount: 150.00, phone: '', paymentDate: '2026-11-03' },
-      { id: '13', name: 'Zeca', ramal: 'TARRAFINHA (R104)', cto: 'CTO 5', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '82991877705', paymentDate: '2026-11-03' },
-      { id: '14', name: 'Edno', ramal: 'TARRAFINHA (R104)', cto: 'CTO 5', dueDate: '2026-11-08', status: 'Pendente', amount: 130.00, phone: '82994056012', paymentDate: '' },
-      { id: '15', name: 'Ary', ramal: 'TARRAFINHA (R104)', cto: 'CTO 5', dueDate: '2026-11-20', status: 'Pendente', amount: 130.00, phone: '82984164142', paymentDate: '' },
-      { id: '16', name: 'Rodrigo 2', ramal: 'TARRAFINHA (R104)', cto: 'CTO 5', dueDate: '2026-11-04', status: 'Pendente', amount: 130.00, phone: '82991350186', paymentDate: '' },
-      { id: '17', name: 'Gilmar', ramal: 'TARRAFINHA (R104)', cto: 'CTO 5', dueDate: '2026-11-05', status: 'Pendente', amount: 110.00, phone: '', paymentDate: '' },
-      { id: '18', name: 'Anamara', ramal: 'RAMAL ASSEMBLEIA (A2-CDO-04) VLAN_102', cto: 'CTO 1', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '', paymentDate: '2026-10-25' },
-      { id: '19', name: 'William', ramal: 'RAMAL ASSEMBLEIA (A2-CDO-04) VLAN_102', cto: 'CTO 1', dueDate: '2026-11-22', status: 'Pendente', amount: 130.00, phone: '', paymentDate: '' },
-      { id: '20', name: 'Railson', ramal: 'RAMAL ASSEMBLEIA (A2-CDO-04) VLAN_102', cto: 'CTO 1', dueDate: '2026-11-07', status: 'Pendente', amount: 150.00, phone: '', paymentDate: '' },
-      { id: '21', name: 'Argemiro', ramal: 'RAMAL ASSEMBLEIA (A2-CDO-04) VLAN_102', cto: 'CTO 5', dueDate: '2026-11-04', status: 'Pendente', amount: 130.00, phone: '', paymentDate: '' },
-      { id: '22', name: 'Gabriel', ramal: 'RAMAL MANELITO (A3-R1-CDO-01) VLAN_101', cto: 'CTO 2', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '', paymentDate: '2026-10-30' },
-      { id: '23', name: 'Renato', ramal: 'RAMAL MANELITO (A3-R1-CDO-01) VLAN_101', cto: 'CTO 3', dueDate: '2026-11-20', status: 'Cortado', amount: 130.00, phone: '', paymentDate: '' },
-      { id: '24', name: 'Moisés-SD', ramal: 'CENTRO (A1-R1-CDD1) VLAN_101', cto: 'CTO 1', dueDate: '2026-11-20', status: 'Pago', amount: 130.00, phone: '82993268611', paymentDate: '2026-10-30' },
-      { id: '25', name: 'Maga Rabel', ramal: 'CENTRO (A1-R1-CDD1) VLAN_101', cto: 'CTO 1', dueDate: '2026-11-09', status: 'Pendente', amount: 130.00, phone: '', paymentDate: '' },
-      { id: '26', name: 'Samira', ramal: 'RAMAL Prox.CCI (A2-CDO-04 R)', cto: 'CTO 2', dueDate: '2026-11-20', status: 'Cortado', amount: 130.00, phone: '', paymentDate: '' }
+      // 5. CENTRO
+      { id: 79, ramal: "CENTRO", nome: "Moises-60", cto: "CTO 1", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "92993298611", pagoEm: "30/10/2026" },
+      { id: 80, ramal: "CENTRO", nome: "Moça\"Rafael", cto: "CTO 1", vencimento: "09/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 81, ramal: "CENTRO", nome: "Francisco pintor", cto: "CTO 2", vencimento: "01/11/2026", valor: 130, status: "Pago", fone: "97984617981", pagoEm: "04/11/2026" },
+      { id: 82, ramal: "CENTRO", nome: "Janaira", cto: "CTO 2", vencimento: "20/11/2026", valor: 130, status: "Cortado", fone: "92991834546", pagoEm: "" },
+      { id: 83, ramal: "CENTRO", nome: "Debora", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 84, ramal: "CENTRO", nome: "Wandreo", cto: "CTO 2", vencimento: "01/11/2026", valor: 100, status: "Pago", fone: "", pagoEm: "01/10/2026" },
+      { id: 85, ramal: "CENTRO", nome: "Josciane", cto: "CTO 2", vencimento: "04/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 86, ramal: "CENTRO", nome: "Augusto", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 87, ramal: "CENTRO", nome: "Ronilson 2", cto: "CTO 2", vencimento: "01/12/2026", valor: 130, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 88, ramal: "CENTRO", nome: "Rozivaldo", cto: "CTO 3", vencimento: "23/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "26/10/2026" },
+      { id: 89, ramal: "CENTRO", nome: "Marcio", cto: "CTO 3", vencimento: "24/11/2026", valor: 130, status: "Pago", fone: "9291930170", pagoEm: "29/10/2026" },
+      { id: 90, ramal: "CENTRO", nome: "Carlos Pinheiro", cto: "CTO 3", vencimento: "22/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "23/10/2026" },
+      { id: 91, ramal: "CENTRO", nome: "Fatima", cto: "CTO 3", vencimento: "01/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 92, ramal: "CENTRO", nome: "IASD", cto: "CTO 4", vencimento: "21/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "22/10/2026" },
+      { id: 93, ramal: "CENTRO", nome: "Nelinho", cto: "CTO 4", vencimento: "05/11/2026", valor: 130, status: "Aberto", fone: "92986087993", pagoEm: "" },
+      { id: 94, ramal: "CENTRO", nome: "Kikiu", cto: "CTO 4", vencimento: "26/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 95, ramal: "CENTRO", nome: "Mendes", cto: "CTO 4", vencimento: "16/11/2026", valor: 110, status: "Cortado", fone: "", pagoEm: "" },
+      { id: 96, ramal: "CENTRO", nome: "Rafael", cto: "CTO 5", vencimento: "26/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 97, ramal: "CENTRO", nome: "Ingrid", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 98, ramal: "CENTRO", nome: "Gilmaro", cto: "CTO 5", vencimento: "05/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "04/11/2026" },
+      { id: 99, ramal: "CENTRO", nome: "Janderson", cto: "CTO 6", vencimento: "20/11/2026", valor: 130, status: "Cortado", fone: "92994727386", pagoEm: "" },
+      { id: 100, ramal: "CENTRO", nome: "Martinha", cto: "CTO 6", vencimento: "18/11/2026", valor: 130, status: "Pago", fone: "92993666516", pagoEm: "27/10/2026" },
+      { id: 101, ramal: "CENTRO", nome: "Cicília", cto: "CTO 6", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 102, ramal: "CENTRO", nome: "Leandro3", cto: "CTO 6", vencimento: "23/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "23/10/2026" },
+      { id: 103, ramal: "CENTRO", nome: "Jefferson", cto: "CTO 6", vencimento: "30/11/2026", valor: 80, status: "Pago", fone: "", pagoEm: "31/10/2026" },
+      { id: 104, ramal: "CENTRO", nome: "Sueli", cto: "CTO 7", vencimento: "24/11/2026", valor: 170, status: "Pago", fone: "92992092162", pagoEm: "26/10/2026" },
+      { id: 105, ramal: "CENTRO", nome: "Loro", cto: "CTO 7", vencimento: "04/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "23/10/2026" },
+      { id: 106, ramal: "CENTRO", nome: "Sueli 2", cto: "CTO 7", vencimento: "06/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 107, ramal: "CENTRO", nome: "Katiana", cto: "CTO 8", vencimento: "03/11/2026", valor: 130, status: "Pago", fone: "27996499418", pagoEm: "28/10/2026" },
+      { id: 108, ramal: "CENTRO", nome: "Rainer", cto: "CTO 8", vencimento: "30/11/2026", valor: 150, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 109, ramal: "CENTRO", nome: "Conceição 2", cto: "CTO 8", vencimento: "20/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "25/10/2026" },
+      { id: 110, ramal: "CENTRO", nome: "Noli (Maria)", cto: "CTO 8", vencimento: "11/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "27/10/2026" },
+
+      // 6. PANTOJA
+      { id: 111, ramal: "PANTOJA", nome: "Isabele-Kaciana", cto: "CTO 4", vencimento: "05/11/2026", valor: 130, status: "Pago", fone: "92993651870", pagoEm: "04/11/2026" },
+      { id: 112, ramal: "PANTOJA", nome: "Jose", cto: "CTO 4", vencimento: "19/11/2026", valor: 130, status: "Pago", fone: "9292987849", pagoEm: "30/10/2026" },
+      { id: 113, ramal: "PANTOJA", nome: "Bruno", cto: "CTO 4", vencimento: "07/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "06/11/2026" },
+      { id: 114, ramal: "PANTOJA", nome: "Silva (Paty)", cto: "CTO 4", vencimento: "10/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "10/10/2026" },
+      { id: 115, ramal: "PANTOJA", nome: "I. Batista", cto: "CTO 3", vencimento: "30/11/2026", valor: 150, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 116, ramal: "PANTOJA", nome: "Efigênio", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "31/10/2026" },
+      { id: 117, ramal: "PANTOJA", nome: "Romário", cto: "CTO 5", vencimento: "22/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 118, ramal: "PANTOJA", nome: "Jomara", cto: "CTO 6", vencimento: "02/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "04/11/2026" },
+
+      // 7. G. VITÓRIA
+      { id: 119, ramal: "G. VITÓRIA", nome: "Luan", cto: "CTO 1", vencimento: "24/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "26/10/2026" },
+      { id: 120, ramal: "G. VITÓRIA", nome: "Wellington", cto: "CTO 1", vencimento: "06/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 121, ramal: "G. VITÓRIA", nome: "Eva", cto: "CTO 1", vencimento: "28/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 122, ramal: "G. VITÓRIA", nome: "Timoteo", cto: "CTO 1", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 123, ramal: "G. VITÓRIA", nome: "Serjane", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "92994680787", pagoEm: "30/10/2026" },
+      { id: 124, ramal: "G. VITÓRIA", nome: "Eliandra", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 125, ramal: "G. VITÓRIA", nome: "Amanda", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 126, ramal: "G. VITÓRIA", nome: "Fael", cto: "CTO 3", vencimento: "05/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "02/11/2026" },
+      { id: 127, ramal: "G. VITÓRIA", nome: "Lopes", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 128, ramal: "G. VITÓRIA", nome: "Marília", cto: "CTO 3", vencimento: "05/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 129, ramal: "G. VITÓRIA", nome: "Elton", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 130, ramal: "G. VITÓRIA", nome: "Mathias", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 131, ramal: "G. VITÓRIA", nome: "Silvia", cto: "CTO 4", vencimento: "02/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 132, ramal: "G. VITÓRIA", nome: "Reis", cto: "CTO 6", vencimento: "23/11/2026", valor: 130, status: "Cortado", fone: "", pagoEm: "" },
+      { id: 133, ramal: "G. VITÓRIA", nome: "Conceição", cto: "CTO 6", vencimento: "13/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 134, ramal: "G. VITÓRIA", nome: "Janderlane", cto: "CTO 6", vencimento: "11/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 135, ramal: "G. VITÓRIA", nome: "Leandro", cto: "CTO 6", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 136, ramal: "G. VITÓRIA", nome: "Raissa", cto: "CTO 6", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 137, ramal: "G. VITÓRIA", nome: "Naldo", cto: "CTO 6", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 138, ramal: "G. VITÓRIA", nome: "Edson", cto: "CTO 7", vencimento: "25/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "26/10/2026" },
+      { id: 139, ramal: "G. VITÓRIA", nome: "Fernanda", cto: "CTO 7", vencimento: "14/11/2026", valor: 130, status: "Aberto", fone: "97991609146", pagoEm: "" },
+      { id: 140, ramal: "G. VITÓRIA", nome: "Luciane", cto: "CTO 8", vencimento: "01/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 141, ramal: "G. VITÓRIA", nome: "Gerlison", cto: "CTO 8", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "03/11/2026" },
+      { id: 142, ramal: "G. VITÓRIA", nome: "Simone", cto: "CTO 5", vencimento: "05/11/2026", valor: 170, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 143, ramal: "G. VITÓRIA", nome: "Mauro", cto: "CTO 5", vencimento: "08/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 144, ramal: "G. VITÓRIA", nome: "Gleibson", cto: "CTO 5", vencimento: "25/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 145, ramal: "G. VITÓRIA", nome: "Raimunda2", cto: "CTO 5", vencimento: "22/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "22/10/2026" },
+
+      // 8. NOVA CONQUISTA
+      { id: 146, ramal: "NOVA CONQUISTA", nome: "Ítalo", cto: "CTO 5", vencimento: "28/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 147, ramal: "NOVA CONQUISTA", nome: "Campos(Adamo)", cto: "CTO 5", vencimento: "01/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "02/11/2026" },
+      { id: 148, ramal: "NOVA CONQUISTA", nome: "Ezequiel", cto: "CTO 5", vencimento: "21/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "21/10/2026" },
+      { id: 149, ramal: "NOVA CONQUISTA", nome: "Dodo", cto: "CTO 3", vencimento: "06/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "06/11/2026" },
+      { id: 150, ramal: "NOVA CONQUISTA", nome: "Neireane", cto: "CTO 3", vencimento: "06/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "06/11/2026" },
+      { id: 151, ramal: "NOVA CONQUISTA", nome: "Junior", cto: "CTO 2", vencimento: "10/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 152, ramal: "NOVA CONQUISTA", nome: "Estherfany", cto: "CTO 2", vencimento: "06/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 153, ramal: "NOVA CONQUISTA", nome: "Ieda", cto: "CTO 2", vencimento: "26/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "26/10/2026" },
+      { id: 154, ramal: "NOVA CONQUISTA", nome: "Gabriel", cto: "CTO 2", vencimento: "05/11/2026", valor: 150, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+
+      // 9. CHÁCARA
+      { id: 155, ramal: "CHÁCARA", nome: "Mário", cto: "CTO 1", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "01/11/2026" },
+      { id: 156, ramal: "CHÁCARA", nome: "Carlos", cto: "CTO 2", vencimento: "14/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 157, ramal: "CHÁCARA", nome: "Rainara", cto: "CTO 2", vencimento: "30/11/2026", valor: 110, status: "Pago", fone: "", pagoEm: "28/10/2026" },
+      { id: 158, ramal: "CHÁCARA", nome: "Leobardo", cto: "CTO 3", vencimento: "14/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 159, ramal: "CHÁCARA", nome: "Neguinho", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "04/11/2026" },
+      { id: 160, ramal: "CHÁCARA", nome: "Ana Claudia", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "05/11/2026" },
+      { id: 161, ramal: "CHÁCARA", nome: "Ana Paula", cto: "CTO 4", vencimento: "30/11/2026", valor: 150, status: "Pago", fone: "", pagoEm: "31/10/2026" },
+      { id: 162, ramal: "CHÁCARA", nome: "Jailma", cto: "CTO 5", vencimento: "20/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 163, ramal: "CHÁCARA", nome: "Rodrigo", cto: "CTO 5", vencimento: "12/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 164, ramal: "CHÁCARA", nome: "Zuleide", cto: "CTO 5", vencimento: "09/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 165, ramal: "CHÁCARA", nome: "Arenilde", cto: "CTO 5", vencimento: "10/11/2026", valor: 110, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 166, ramal: "CHÁCARA", nome: "Daniel 2", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 167, ramal: "CHÁCARA", nome: "Olhão", cto: "CTO 5", vencimento: "10/11/2026", valor: 100, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 168, ramal: "CHÁCARA", nome: "Claudia Mariano", cto: "CTO 5", vencimento: "23/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "25/10/2026" },
+      { id: 169, ramal: "CHÁCARA", nome: "Aguinaldina", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "", pagoEm: "" },
+      { id: 170, ramal: "CHÁCARA", nome: "Eduarda", cto: "CTO 8", vencimento: "28/11/2026", valor: 170, status: "Pago", fone: "", pagoEm: "30/10/2026" },
+      { id: 171, ramal: "CHÁCARA", nome: "Adriana", cto: "CTO 8", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "", pagoEm: "30/10/2026" }
     ];
 
-    let clients = [];
-    let appConfig = {
-      pixKey: '82991780727',
-      pixName: 'Rede Metro Telecom'
-    };
-    let currentView = 'card'; // 'card' ou 'table'
-    let deferredPrompt = null;
+    let clientes = JSON.parse(localStorage.getItem('isp_clientes')) || CLIENTES_PADRAO;
+    let config = JSON.parse(localStorage.getItem('isp_config')) || { pix: "97991521046" };
 
-    // Inicialização
-    window.addEventListener('DOMContentLoaded', () => {
-      loadStorageData();
-      setupConnectivityMonitor();
-      setupPwaInstallPrompt();
-      populateRamaisList();
-      updateDashboard();
-      renderData();
-    });
-
-    // Carrega dados locais persistentes
-    function loadStorageData() {
-      try {
-        const storedClients = localStorage.getItem(STORAGE_KEY_CLIENTS);
-        if (storedClients) {
-          clients = JSON.parse(storedClients);
-        } else {
-          clients = [...DEFAULT_CLIENTS];
-          persistClients();
-        }
-
-        const storedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
-        if (storedConfig) {
-          appConfig = { ...appConfig, ...JSON.parse(storedConfig) };
-        }
-
-        const storedView = localStorage.getItem(STORAGE_KEY_VIEW);
-        if (storedView) {
-          currentView = storedView;
-        }
-      } catch (e) {
-        console.error('Erro ao ler armazenamento local:', e);
-        clients = [...DEFAULT_CLIENTS];
-      }
+    function salvarDados() {
+      localStorage.setItem('isp_clientes', JSON.stringify(clientes));
+      localStorage.setItem('isp_config', JSON.stringify(config));
     }
 
-    function persistClients() {
-      try {
-        localStorage.setItem(STORAGE_KEY_CLIENTS, JSON.stringify(clients));
-      } catch (e) {
-        console.error('Falha ao gravar no LocalStorage:', e);
-      }
-    }
-
-    function persistConfig() {
-      try {
-        localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(appConfig));
-      } catch (e) {
-        console.error('Falha ao gravar configurações:', e);
-      }
-    }
-
-    // Monitor Online / Offline em tempo real
-    function setupConnectivityMonitor() {
-      const updateStatus = () => {
-        const isOnline = navigator.onLine;
-        const badge = document.getElementById('connectionBadge');
-        const text = document.getElementById('connectionText');
-
-        if (isOnline) {
-          badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-          badge.querySelector('span').className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse';
-          text.textContent = 'Online';
-        } else {
-          badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30';
-          badge.querySelector('span').className = 'w-1.5 h-1.5 rounded-full bg-amber-400';
-          text.textContent = 'Offline (Local)';
-          showToast('Modo Offline: Seus dados estão seguros e salvos no aparelho.', 'fa-wifi', 'bg-amber-600');
-        }
-      };
-
-      window.addEventListener('online', updateStatus);
-      window.addEventListener('offline', updateStatus);
-      updateStatus();
-    }
-
-    // Intercepta e gerencia o evento de instalação do PWA
-    function setupPwaInstallPrompt() {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        // Exibe o banner amigável de instalação
-        const banner = document.getElementById('pwaInstallBanner');
-        const headerBtn = document.getElementById('headerInstallBtn');
-        if (banner) banner.classList.remove('hidden');
-        if (headerBtn) headerBtn.classList.remove('hidden');
-      });
-
-      window.addEventListener('appinstalled', () => {
-        dismissInstallBanner();
-        showToast('App instalado com sucesso na tela inicial!', 'fa-circle-check', 'bg-emerald-600');
-        deferredPrompt = null;
+    function popularRamais() {
+      const select = document.getElementById('filtroRamal');
+      const ramais = [...new Set(clientes.map(c => c.ramal))];
+      select.innerHTML = '<option value="">Todos os Ramais</option>';
+      ramais.forEach(r => {
+        select.innerHTML += `<option value="${r}">${r}</option>`;
       });
     }
 
-    function triggerPwaInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            dismissInstallBanner();
-          }
-          deferredPrompt = null;
-        });
-      } else {
-        // Instrução amigável caso navegador já tenha o app ou esteja no Safari iOS
-        showToast('No Safari (iOS), toque em "Compartilhar" e depois "Adicionar à Tela de Início". No Chrome, acesse o menu ⋮ e toque em "Instalar".', 'fa-mobile-screen', 'bg-blue-600');
-      }
-    }
+    function renderizar() {
+      const container = document.getElementById('containerClientes');
+      const busca = document.getElementById('inputBusca').value.toLowerCase();
+      const ramalFiltro = document.getElementById('filtroRamal').value;
+      const statusFiltro = document.getElementById('filtroStatus').value;
 
-    function dismissInstallBanner() {
-      const banner = document.getElementById('pwaInstallBanner');
-      if (banner) banner.classList.add('hidden');
-    }
-
-    // Alternar Visualização entre Cards e Tabela
-    function switchView(view) {
-      currentView = view;
-      localStorage.setItem(STORAGE_KEY_VIEW, view);
-
-      const cardsContainer = document.getElementById('cardsContainer');
-      const tableContainer = document.getElementById('tableContainer');
-      const cardBtn = document.getElementById('viewCardBtn');
-      const tableBtn = document.getElementById('viewTableBtn');
-
-      if (view === 'card') {
-        cardsContainer.classList.remove('hidden');
-        tableContainer.classList.add('hidden');
-        cardBtn.className = 'px-2.5 py-1 rounded-lg bg-cyan-600 text-white font-semibold flex items-center gap-1 transition';
-        tableBtn.className = 'px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition';
-      } else {
-        cardsContainer.classList.add('hidden');
-        tableContainer.classList.remove('hidden');
-        tableBtn.className = 'px-2.5 py-1 rounded-lg bg-cyan-600 text-white font-semibold flex items-center gap-1 transition';
-        cardBtn.className = 'px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition';
-      }
-      renderData();
-    }
-
-    // Popula Datalist e Filtro de Ramais
-    function populateRamaisList() {
-      const uniqueRamais = [...new Set(clients.map(c => c.ramal))].filter(Boolean).sort();
-      const filterSelect = document.getElementById('filterRamal');
-      const datalist = document.getElementById('ramaisList');
-
-      // Preserva o valor selecionado
-      const curFilter = filterSelect.value;
-      filterSelect.innerHTML = '<option value="ALL">Todos os Ramais</option>';
-      datalist.innerHTML = '';
-
-      uniqueRamais.forEach(r => {
-        const opt = document.createElement('option');
-        opt.value = r;
-        opt.textContent = r;
-        filterSelect.appendChild(opt);
-
-        const dataOpt = document.createElement('option');
-        dataOpt.value = r;
-        datalist.appendChild(dataOpt);
+      let filtrados = clientes.filter(c => {
+        const matchesBusca = c.nome.toLowerCase().includes(busca) || c.cto.toLowerCase().includes(busca) || c.fone.includes(busca);
+        const matchesRamal = !ramalFiltro || c.ramal === ramalFiltro;
+        const matchesStatus = !statusFiltro || c.status === statusFiltro;
+        return matchesBusca && matchesRamal && matchesStatus;
       });
 
-      if (uniqueRamais.includes(curFilter)) {
-        filterSelect.value = curFilter;
-      }
-    }
+      // Atualizar métricas
+      let totalRecebido = 0, totalAberto = 0, totalCortado = 0;
+      let countPago = 0, countAberto = 0, countCortado = 0;
 
-    // Calcula se está em atraso com base na data de hoje
-    function getDueInfo(client) {
-      if (!client.dueDate) return { isOverdue: false, days: 0, label: 'Indefinido' };
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const parts = client.dueDate.split('-');
-      const dueDate = new Date(parts[0], parts[1] - 1, parts[2]);
-
-      const diffTime = today.getTime() - dueDate.getTime();
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-      if (client.status === 'Pago') {
-        return { isOverdue: false, days: 0, label: 'PAGO' };
-      }
-
-      if (diffDays > 0) {
-        return { isOverdue: true, days: diffDays, label: 'VENCIDA' };
-      } else if (diffDays === 0) {
-        return { isOverdue: false, days: 0, label: 'VENCE HOJE' };
-      } else {
-        return { isOverdue: false, days: 0, label: 'EM ABERTO' };
-      }
-    }
-
-    // Atualiza Métricas do Topo
-    function updateDashboard() {
-      let totalReceived = 0;
-      let totalPending = 0;
-      let totalOverdue = 0;
-      let paidCount = 0;
-      let pendingCount = 0;
-      let overdueCount = 0;
-
-      clients.forEach(c => {
-        const info = getDueInfo(c);
-        const val = parseFloat(c.amount) || 0;
-
-        if (c.status === 'Pago') {
-          totalReceived += val;
-          paidCount++;
-        } else if (c.status === 'Cortado' || info.isOverdue) {
-          totalOverdue += val;
-          overdueCount++;
-        } else {
-          totalPending += val;
-          pendingCount++;
-        }
+      clientes.forEach(c => {
+        if (c.status === 'Pago') { totalRecebido += c.valor; countPago++; }
+        else if (c.status === 'Aberto') { totalAberto += c.valor; countAberto++; }
+        else if (c.status === 'Cortado') { totalCortado += c.valor; countCortado++; }
       });
 
-      document.getElementById('statTotalClients').textContent = clients.length;
-      document.getElementById('statActiveSub').textContent = `Em dia: ${paidCount}`;
-      document.getElementById('statTotalReceived').textContent = `R$ ${totalReceived.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('statPaidCount').textContent = `${paidCount} quitados`;
-      document.getElementById('statTotalPending').textContent = `R$ ${totalPending.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('statPendingCount').textContent = `${pendingCount} em aberto`;
-      document.getElementById('statTotalOverdue').textContent = `R$ ${totalOverdue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('statOverdueCount').textContent = `${overdueCount} atrasados/bloqueados`;
-    }
+      document.getElementById('statTotalClientes').innerText = clientes.length;
+      document.getElementById('statEmDia').innerText = `${countPago} pagos`;
+      document.getElementById('statTotalPago').innerText = `R$ ${totalRecebido.toLocaleString('pt-BR')}`;
+      document.getElementById('statCountPago').innerText = `${countPago} quitações`;
+      document.getElementById('statTotalAberto').innerText = `R$ ${totalAberto.toLocaleString('pt-BR')}`;
+      document.getElementById('statCountAberto').innerText = `${countAberto} em aberto`;
+      document.getElementById('statTotalCortado').innerText = `R$ ${totalCortado.toLocaleString('pt-BR')}`;
+      document.getElementById('statCountCortado').innerText = `${countCortado} bloqueados`;
 
-    // Renderização Completa (Cards e Tabela)
-    function renderData() {
-      const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
-      const ramalFilter = document.getElementById('filterRamal').value;
-      const statusFilter = document.getElementById('filterStatus').value;
-
-      const filtered = clients.filter(c => {
-        const matchSearch = !searchVal ||
-          c.name.toLowerCase().includes(searchVal) ||
-          c.cto.toLowerCase().includes(searchVal) ||
-          (c.phone && c.phone.includes(searchVal));
-
-        const matchRamal = ramalFilter === 'ALL' || c.ramal === ramalFilter;
-
-        let matchStatus = true;
-        const dueInfo = getDueInfo(c);
-
-        if (statusFilter === 'Pago') matchStatus = c.status === 'Pago';
-        else if (statusFilter === 'Pendente') matchStatus = c.status === 'Pendente';
-        else if (statusFilter === 'Cortado') matchStatus = c.status === 'Cortado';
-        else if (statusFilter === 'Vencida') matchStatus = dueInfo.isOverdue || c.status === 'Cortado';
-
-        return matchSearch && matchRamal && matchStatus;
-      });
-
-      document.getElementById('filteredCountBadge').textContent = `${filtered.length} de ${clients.length} clientes encontrados`;
-
-      if (currentView === 'card') {
-        renderCards(filtered);
-      } else {
-        renderTableRows(filtered);
-      }
-    }
-
-    // Renderização dos Cards Mobile
-    function renderCards(list) {
-      const container = document.getElementById('cardsContainer');
-
-      if (list.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-12 text-center text-slate-500 bg-[#0f172a] rounded-2xl border border-slate-800">
-            <i class="fa-solid fa-user-slash text-3xl mb-2 block text-slate-600"></i>
-            Nenhum cliente corresponde aos filtros aplicados.
-          </div>
-        `;
+      // Renderizar Cards
+      container.innerHTML = '';
+      if (filtrados.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">Nenhum cliente encontrado.</div>`;
         return;
       }
 
-      container.innerHTML = list.map(c => {
-        const dueInfo = getDueInfo(c);
+      filtrados.forEach(c => {
+        let badgeClass = c.status === 'Pago' ? 'status-pago' : (c.status === 'Aberto' ? 'status-aberto' : 'status-cortado');
+        let iconStatus = c.status === 'Pago' ? 'fa-check' : (c.status === 'Aberto' ? 'fa-clock' : 'fa-xmark');
 
-        // Estilização do Status
-        let statusBadge = '';
-        let borderCardColor = 'border-slate-800';
-
-        if (c.status === 'Pago') {
-          statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1"><i class="fa-solid fa-check"></i> Pago</span>`;
-        } else if (c.status === 'Cortado') {
-          borderCardColor = 'border-rose-900/60 bg-rose-950/10';
-          statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-600/30 text-rose-300 border border-rose-500/40 flex items-center gap-1"><i class="fa-solid fa-ban"></i> Cortado</span>`;
-        } else if (dueInfo.isOverdue) {
-          borderCardColor = 'border-amber-600/50 bg-amber-950/10';
-          statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-600/30 text-red-300 border border-red-500/40 flex items-center gap-1 animate-pulse"><i class="fa-solid fa-clock"></i> Vencida (${dueInfo.days}d)</span>`;
-        } else if (dueInfo.label === 'VENCE HOJE') {
-          statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center gap-1">Vence Hoje</span>`;
-        } else {
-          statusBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">Em Aberto</span>`;
-        }
-
-        const formattedDueDate = formatDateBR(c.dueDate);
-        const formattedAmount = `R$ ${parseFloat(c.amount).toFixed(2).replace('.', ',')}`;
-
-        return `
-          <div class="bg-[#0f172a] border ${borderCardColor} rounded-2xl p-4 shadow-sm hover:border-slate-700 transition flex flex-col justify-between space-y-3.5">
-            <!-- Cabeçalho do Card -->
-            <div class="flex items-start justify-between gap-2">
+        container.innerHTML += `
+          <div class="glass-card rounded-xl p-3 flex flex-col gap-2">
+            <div class="flex items-center justify-between">
               <div>
-                <h4 class="font-bold text-white text-base leading-snug">${c.name}</h4>
-                <p class="text-xs text-cyan-400 font-medium flex items-center gap-1 mt-0.5">
-                  <i class="fa-solid fa-network-wired text-[10px]"></i> ${c.ramal}
-                </p>
+                <span class="text-[10px] text-cyan-400 font-medium">${c.ramal}</span>
+                <h4 class="text-sm font-bold text-white">${c.nome}</h4>
               </div>
-              <div>${statusBadge}</div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-1 ${badgeClass}">
+                <i class="fa-solid ${iconStatus}"></i> ${c.status}
+              </span>
             </div>
 
-            <!-- Dados Técnicos -->
-            <div class="grid grid-cols-2 gap-2 text-xs py-2 px-3 rounded-xl bg-slate-900/80 border border-slate-800/80">
+            <div class="grid grid-cols-3 gap-1 py-1 border-y border-slate-800 text-[11px]">
               <div>
-                <span class="text-slate-500 text-[10px] uppercase font-bold block">CTO / Porta</span>
-                <span class="font-semibold text-slate-200">${c.cto}</span>
+                <span class="text-[9px] text-slate-400 block">CTO / Porta</span>
+                <span class="text-slate-200 font-medium">${c.cto}</span>
               </div>
               <div>
-                <span class="text-slate-500 text-[10px] uppercase font-bold block">Vencimento</span>
-                <span class="font-semibold text-slate-200">${formattedDueDate}</span>
+                <span class="text-[9px] text-slate-400 block">Vencimento</span>
+                <span class="text-slate-200 font-medium">${c.vencimento}</span>
               </div>
-              <div class="mt-1">
-                <span class="text-slate-500 text-[10px] uppercase font-bold block">Mensalidade</span>
-                <span class="font-bold text-emerald-400 text-sm">${formattedAmount}</span>
-              </div>
-              <div class="mt-1">
-                <span class="text-slate-500 text-[10px] uppercase font-bold block">WhatsApp</span>
-                <span class="font-mono text-slate-300">${c.phone ? c.phone : '<span class="text-slate-600">Não informado</span>'}</span>
+              <div>
+                <span class="text-[9px] text-slate-400 block">Valor</span>
+                <span class="text-emerald-400 font-bold">R$ ${c.valor},00</span>
               </div>
             </div>
 
-            <!-- Ações Rápidas de Toque Único -->
-            <div class="flex items-center justify-between pt-1 gap-2">
-              <!-- Botão WhatsApp Cobrança -->
-              <button onclick="sendWhatsAppBilling('${c.id}')" class="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition active:scale-95">
-                <i class="fa-brands fa-whatsapp text-sm"></i> Cobrar PIX
-              </button>
-
-              <!-- Seletor Rápido de Status -->
-              <div class="inline-flex rounded-xl bg-slate-900 border border-slate-700/80 p-0.5">
-                <button onclick="quickUpdateStatus('${c.id}', 'Pago')" title="Pago" class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition ${c.status === 'Pago' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
+            <div class="flex items-center justify-between pt-1">
+              <div class="flex gap-1">
+                <button onclick="mudarStatus(${c.id}, 'Pago')" title="Marcar Pago" class="w-7 h-7 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 flex items-center justify-center text-xs">
                   <i class="fa-solid fa-check"></i>
                 </button>
-                <button onclick="quickUpdateStatus('${c.id}', 'Pendente')" title="Pendente" class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition ${c.status === 'Pendente' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'}">
-                  <i class="fa-solid fa-hourglass-half"></i>
+                <button onclick="mudarStatus(${c.id}, 'Aberto')" title="Marcar Em Aberto" class="w-7 h-7 rounded-lg bg-amber-950/60 text-amber-400 border border-amber-800/40 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-clock"></i>
                 </button>
-                <button onclick="quickUpdateStatus('${c.id}', 'Cortado')" title="Cortar / Bloquear" class="px-2.5 py-1.5 rounded-lg text-xs font-bold transition ${c.status === 'Cortado' ? 'bg-rose-600 text-white' : 'text-slate-400 hover:text-white'}">
+                <button onclick="mudarStatus(${c.id}, 'Cortado')" title="Marcar Cortado" class="w-7 h-7 rounded-lg bg-rose-950/60 text-rose-400 border border-rose-800/40 flex items-center justify-center text-xs">
                   <i class="fa-solid fa-ban"></i>
                 </button>
               </div>
 
-              <!-- Editar / Excluir -->
-              <div class="flex items-center space-x-1">
-                <button onclick="editClient('${c.id}')" title="Editar" class="p-2 text-slate-400 hover:text-cyan-400 rounded-lg transition">
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button onclick="deleteClient('${c.id}')" title="Excluir" class="p-2 text-slate-400 hover:text-rose-500 rounded-lg transition">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
-              </div>
+              ${c.fone ? `
+                <a href="https://wa.me/55${c.fone}?text=${encodeURIComponent('Olá ' + c.nome + ', segue a cobrança da sua internet Netsoluções Telecom no valor de R$ ' + c.valor + ',00 com vencimento em ' + c.vencimento + '. Chave PIX: ' + config.pix)}" target="_blank" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white text-[11px] font-semibold flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                  <i class="fa-brands fa-whatsapp text-xs"></i> Cobrar PIX
+                </a>
+              ` : `
+                <span class="text-[10px] text-slate-500 italic">Sem WhatsApp</span>
+              `}
             </div>
           </div>
         `;
-      }).join('');
+      });
     }
 
-    // Renderização dos Registros em Tabela
-    function renderTableRows(list) {
-      const tbody = document.getElementById('tableBody');
-
-      if (list.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" class="text-center py-10 text-slate-500">Nenhum cliente localizado.</td>
-          </tr>
-        `;
-        return;
-      }
-
-      tbody.innerHTML = list.map(c => {
-        const dueInfo = getDueInfo(c);
-
-        let situacaoBadge = '';
-        if (c.status === 'Pago') {
-          situacaoBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-500/20 text-emerald-400">PAGO</span>`;
-        } else if (c.status === 'Cortado') {
-          situacaoBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-500/20 text-rose-400">CORTADO</span>`;
-        } else if (dueInfo.isOverdue) {
-          situacaoBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-red-600/30 text-red-400 animate-pulse">VENCIDA</span>`;
-        } else {
-          situacaoBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/20 text-amber-400">EM ABERTO</span>`;
-        }
-
-        return `
-          <tr class="hover:bg-slate-800/40 transition">
-            <td class="py-3 px-4 font-bold text-white">${c.name}</td>
-            <td class="py-3 px-3">
-              <span class="text-cyan-400 block">${c.ramal}</span>
-              <span class="text-slate-400 text-[11px] font-mono">${c.cto}</span>
-            </td>
-            <td class="py-3 px-3">${formatDateBR(c.dueDate)}</td>
-            <td class="py-3 px-3 font-bold text-emerald-400">R$ ${parseFloat(c.amount).toFixed(2).replace('.', ',')}</td>
-            <td class="py-3 px-3">${situacaoBadge}</td>
-            <td class="py-3 px-3 text-slate-400">${dueInfo.days > 0 ? `<span class="text-rose-400 font-bold">${dueInfo.days} dia(s)</span>` : '-'}</td>
-            <td class="py-3 px-3 text-center">
-              <button onclick="sendWhatsAppBilling('${c.id}')" class="px-2.5 py-1 bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600 hover:text-white rounded-lg text-xs font-semibold transition">
-                <i class="fa-brands fa-whatsapp"></i> WhatsApp
-              </button>
-            </td>
-            <td class="py-3 px-4 text-right space-x-1">
-              <button onclick="editClient('${c.id}')" class="p-1.5 text-slate-400 hover:text-cyan-400 transition"><i class="fa-solid fa-pen"></i></button>
-              <button onclick="deleteClient('${c.id}')" class="p-1.5 text-slate-400 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // Helper data AAAA-MM-DD para DD/MM/AAAA
-    function formatDateBR(dateStr) {
-      if (!dateStr) return '-';
-      const parts = dateStr.split('-');
-      if (parts.length !== 3) return dateStr;
-      return `${parts[2]}/${parts[1]}/${parts[0]}`;
-    }
-
-    // Mudança rápida de Status (com 1 toque)
-    function quickUpdateStatus(clientId, newStatus) {
-      const client = clients.find(c => c.id === clientId);
-      if (!client) return;
-
-      client.status = newStatus;
-      if (newStatus === 'Pago' && !client.paymentDate) {
-        client.paymentDate = new Date().toISOString().split('T')[0];
-      } else if (newStatus !== 'Pago') {
-        client.paymentDate = '';
-      }
-
-      persistClients();
-      updateDashboard();
-      renderData();
-      showToast(`${client.name} marcado como ${newStatus}`, 'fa-circle-check', 'bg-cyan-600');
-    }
-
-    // Gerador e Disparador de Cobrança WhatsApp com PIX
-    function sendWhatsAppBilling(clientId) {
-      const client = clients.find(c => c.id === clientId);
-      if (!client) return;
-
-      if (!client.phone) {
-        showToast('Informe o telefone WhatsApp do cliente para realizar cobranças.', 'fa-phone-slash', 'bg-amber-600');
-        editClient(clientId);
-        return;
-      }
-
-      let cleanPhone = client.phone.replace(/\D/g, '');
-      if (cleanPhone.length <= 11) {
-        cleanPhone = '55' + cleanPhone;
-      }
-
-      const formattedDue = formatDateBR(client.dueDate);
-      const valStr = `R$ ${parseFloat(client.amount).toFixed(2).replace('.', ',')}`;
-
-      const msg = `Olá, *${client.name}*! Tudo bem? 👋\n\n` +
-                  `Aqui é do atendimento da *${appConfig.pixName}*.\n` +
-                  `Informamos sobre sua assinatura de internet fibra:\n\n` +
-                  `📌 *Vencimento:* ${formattedDue}\n` +
-                  `💵 *Valor:* ${valStr}\n` +
-                  `🔌 *Conexão:* ${client.ramal} (${client.cto})\n\n` +
-                  `Para pagar via PIX com rapidez:\n` +
-                  `🔑 *Chave PIX:* ${appConfig.pixKey}\n` +
-                  `👤 *Beneficiário:* ${appConfig.pixName}\n\n` +
-                  `Basta enviar o comprovante por aqui assim que concluir. Obrigado pela parceria! 🌐`;
-
-      const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
-      showToast(`Abrindo WhatsApp para ${client.name}...`, 'fa-brands fa-whatsapp', 'bg-emerald-600');
-    }
-
-    // Modal Cliente
-    function openClientModal(isEdit = false) {
-      document.getElementById('clientModal').classList.remove('hidden');
-      if (!isEdit) {
-        document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-user-plus text-cyan-400"></i> Novo Cliente';
-        document.getElementById('editClientId').value = '';
-        document.getElementById('clientForm').reset();
-        document.getElementById('formDueDate').value = new Date().toISOString().split('T')[0];
-        document.getElementById('formAmount').value = '130.00';
-        togglePaymentDateInput();
+    function mudarStatus(id, novoStatus) {
+      const index = clientes.findIndex(c => c.id === id);
+      if (index !== -1) {
+        clientes[index].status = novoStatus;
+        salvarDados();
+        renderizar();
       }
     }
 
-    function closeClientModal() {
-      document.getElementById('clientModal').classList.add('hidden');
+    function abrirConfig() {
+      document.getElementById('configPix').value = config.pix;
+      document.getElementById('modalConfig').classList.remove('hidden');
     }
-
-    function togglePaymentDateInput() {
-      const st = document.getElementById('formStatus').value;
-      const group = document.getElementById('paymentDateGroup');
-      const input = document.getElementById('formPaymentDate');
-
-      if (st === 'Pago') {
-        group.classList.remove('opacity-40', 'pointer-events-none');
-        if (!input.value) {
-          input.value = new Date().toISOString().split('T')[0];
-        }
-      } else {
-        group.classList.add('opacity-40', 'pointer-events-none');
-        input.value = '';
+    function fecharConfig() {
+      document.getElementById('modalConfig').classList.add('hidden');
+    }
+    function salvarConfig() {
+      config.pix = document.getElementById('configPix').value;
+      salvarDados();
+      fecharConfig();
+      renderizar();
+    }
+    function exportarBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clientes));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_isp_netsolucoes.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+    function restaurarPadrao() {
+      if (confirm("Deseja restaurar a base de dados completa lida das imagens?")) {
+        clientes = [...CLIENTES_PADRAO];
+        salvarDados();
+        popularRamais();
+        renderizar();
+        fecharConfig();
       }
     }
 
-    function editClient(id) {
-      const client = clients.find(c => c.id === id);
-      if (!client) return;
-
-      document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-user-pen text-cyan-400"></i> Editar Dados do Cliente';
-      document.getElementById('editClientId').value = client.id;
-      document.getElementById('formName').value = client.name;
-      document.getElementById('formRamal').value = client.ramal;
-      document.getElementById('formCto').value = client.cto;
-      document.getElementById('formDueDate').value = client.dueDate;
-      document.getElementById('formAmount').value = client.amount;
-      document.getElementById('formPhone').value = client.phone || '';
-      document.getElementById('formStatus').value = client.status;
-      document.getElementById('formPaymentDate').value = client.paymentDate || '';
-
-      togglePaymentDateInput();
-      openClientModal(true);
-    }
-
-    function saveClient(e) {
-      e.preventDefault();
-      const editId = document.getElementById('editClientId').value;
-
-      const clientData = {
-        name: document.getElementById('formName').value.trim(),
-        ramal: document.getElementById('formRamal').value.trim(),
-        cto: document.getElementById('formCto').value.trim(),
-        dueDate: document.getElementById('formDueDate').value,
-        amount: parseFloat(document.getElementById('formAmount').value) || 0,
-        phone: document.getElementById('formPhone').value.trim(),
-        status: document.getElementById('formStatus').value,
-        paymentDate: document.getElementById('formPaymentDate').value || ''
-      };
-
-      if (editId) {
-        const idx = clients.findIndex(c => c.id === editId);
-        if (idx !== -1) {
-          clients[idx] = { ...clients[idx], ...clientData };
-          showToast('Cliente atualizado com sucesso!', 'fa-circle-check', 'bg-cyan-600');
-        }
-      } else {
-        const newId = Date.now().toString();
-        clients.unshift({ id: newId, ...clientData });
-        showToast('Novo cliente cadastrado!', 'fa-user-check', 'bg-emerald-600');
-      }
-
-      persistClients();
-      populateRamaisList();
-      updateDashboard();
-      renderData();
-      closeClientModal();
-    }
-
-    function deleteClient(id) {
-      const client = clients.find(c => c.id === id);
-      if (!client) return;
-
-      if (confirm(`Deseja remover "${client.name}" do sistema?`)) {
-        clients = clients.filter(c => c.id !== id);
-        persistClients();
-        populateRamaisList();
-        updateDashboard();
-        renderData();
-        showToast('Cliente removido.', 'fa-trash-can', 'bg-rose-600');
-      }
-    }
-
-    // Modal Configurações & Backup
-    function openConfigModal() {
-      document.getElementById('pixKeyInput').value = appConfig.pixKey;
-      document.getElementById('pixNameInput').value = appConfig.pixName;
-      document.getElementById('configModal').classList.remove('hidden');
-    }
-
-    function closeConfigModal() {
-      document.getElementById('configModal').classList.add('hidden');
-    }
-
-    function saveConfigurations() {
-      appConfig.pixKey = document.getElementById('pixKeyInput').value.trim();
-      appConfig.pixName = document.getElementById('pixNameInput').value.trim();
-      persistConfig();
-      closeConfigModal();
-      showToast('Configurações salvas no aparelho!', 'fa-floppy-disk', 'bg-emerald-600');
-    }
-
-    // Exportar Backup para Arquivo JSON
-    function exportBackupData() {
-      const backupObj = {
-        app: 'ISP Manager Pro',
-        version: '2.0-pwa',
-        date: new Date().toISOString(),
-        config: appConfig,
-        clients: clients
-      };
-
-      const jsonStr = JSON.stringify(backupObj, null, 2);
-      const blob = new Blob([jsonStr], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `backup_isp_manager_${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Arquivo de backup baixado com sucesso!', 'fa-file-arrow-down', 'bg-cyan-600');
-    }
-
-    // Importar Backup de Arquivo JSON
-    function importBackupData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const imported = JSON.parse(e.target.result);
-          if (Array.isArray(imported.clients)) {
-            clients = imported.clients;
-            if (imported.config) appConfig = imported.config;
-            persistClients();
-            persistConfig();
-            populateRamaisList();
-            updateDashboard();
-            renderData();
-            closeConfigModal();
-            showToast('Backup restaurado com sucesso!', 'fa-file-circle-check', 'bg-emerald-600');
-          } else {
-            showToast('Arquivo de backup inválido.', 'fa-triangle-exclamation', 'bg-rose-600');
-          }
-        } catch (err) {
-          showToast('Erro ao ler arquivo de backup.', 'fa-triangle-exclamation', 'bg-rose-600');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    // Restaurar lista padrão original
-    function resetDefaultData() {
-      if (confirm('Restaurar os dados originais da planilha? Seus cadastros atuais serão sobrescritos.')) {
-        clients = [...DEFAULT_CLIENTS];
-        persistClients();
-        populateRamaisList();
-        updateDashboard();
-        renderData();
-        closeConfigModal();
-        showToast('Dados originais restaurados!', 'fa-arrow-rotate-left', 'bg-cyan-600');
-      }
-    }
-
-    // Toast de Feedback
-    let toastTimeout;
-    function showToast(msg, iconClass = 'fa-circle-info', bgClass = 'bg-cyan-600') {
-      const toast = document.getElementById('toast');
-      const icon = document.getElementById('toastIcon');
-      const text = document.getElementById('toastMsg');
-
-      clearTimeout(toastTimeout);
-      toast.className = `fixed bottom-4 right-4 left-4 sm:left-auto sm:w-80 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl text-white transform transition-all duration-300 ${bgClass}`;
-      icon.className = `fa-solid ${iconClass} text-lg`;
-      text.textContent = msg;
-
-      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
-      toastTimeout = setTimeout(() => {
-        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
-      }, 3500);
-    }
+    popularRamais();
+    renderizar();
   </script>
 </body>
 </html>
+a
