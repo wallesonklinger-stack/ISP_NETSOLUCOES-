@@ -19,7 +19,7 @@
   </style>
 </head>
 <body class="pb-24">
-  <!-- Topo -->
+  <!-- Topo com Botao Novo e Engrenagem -->
   <header class="sticky top-0 z-40 bg-[#0b132b]/95 backdrop-blur border-b border-slate-800 px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-2.5">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
@@ -30,11 +30,8 @@
         <p class="text-[11px] text-cyan-400">Gestão Telecom</p>
       </div>
     </div>
-    <div class="flex items-center gap-1.5">
-      <button id="btnInstalarApp" onclick="acionarInstalacao()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-md shadow-emerald-600/30">
-        <i class="fa-solid fa-download"></i> Instalar
-      </button>
-      <button onclick="abrirModalCliente()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 shadow-md shadow-cyan-600/30">
+    <div class="flex items-center gap-2">
+      <button onclick="abrirModalCliente()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-cyan-600/30">
         <i class="fa-solid fa-plus"></i> Novo
       </button>
       <button onclick="abrirConfig()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center text-xs">
@@ -87,16 +84,16 @@
       </div>
     </div>
 
-    <!-- Lista de Clientes -->
+    <!-- Lista -->
     <div id="containerClientes" class="space-y-2.5"></div>
   </main>
 
-  <!-- Modal Cadastro/Edição de Cliente -->
+  <!-- Modal Cadastro e Edicao -->
   <div id="modalCliente" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card bg-slate-900 rounded-2xl w-full max-w-sm p-4 space-y-3 border border-slate-700 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center pb-2 border-b border-slate-800">
         <h3 id="modalClienteTitulo" class="font-bold text-white text-sm">Editar Cliente</h3>
-        <button onclick="fecharModalCliente()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="fecharModalCliente()" class="text-slate-400 text-base"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <input type="hidden" id="clienteId">
       <div>
@@ -166,25 +163,6 @@
   </div>
 
   <script>
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const btn = document.getElementById('btnInstalarApp');
-      if (btn) btn.classList.remove('hidden');
-    });
-
-    function acionarInstalacao() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          deferredPrompt = null;
-        });
-      } else {
-        alert("Para instalar agora no Android:\n\n1. Toque nos 3 pontinhos (⋮) do Chrome no canto superior.\n2. Escolha 'Criar atalho' ou 'Instalar aplicativo'.\n3. Marque 'Abrir como janela' e confirme!");
-      }
-    }
-
     (function() {
       const manifest = {
         name: "Netsoluções",
@@ -207,10 +185,61 @@
     })();
 
     const CLIENTES_PADRAO = [
-      // TARRAFINHA (R104)
+      // TARRAFINHA
       { id: 1, ramal: "TARRAFINHA", nome: "Ariadna", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "92991780727" },
       { id: 2, ramal: "TARRAFINHA", nome: "Rose", cto: "CTO 2", vencimento: "03/11/2026", valor: 130, status: "Pago", fone: "" },
       { id: 3, ramal: "TARRAFINHA", nome: "Gessiane", cto: "CTO 2", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
       { id: 4, ramal: "TARRAFINHA", nome: "Marilene", cto: "CTO 3", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "97991521046" },
-      { id: 5, ramal: "TARRAFINHA", nome: "Tainá", cto: "
-        
+      { id: 5, ramal: "TARRAFINHA", nome: "Tainá", cto: "CTO 3", vencimento: "28/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 6, ramal: "TARRAFINHA", nome: "Franck", cto: "CTO 4", vencimento: "16/11/2026", valor: 130, status: "Pago", fone: "92993768055" },
+      { id: 7, ramal: "TARRAFINHA", nome: "Emergência", cto: "CTO 4", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 8, ramal: "TARRAFINHA", nome: "Emergência-H", cto: "CTO 4", vencimento: "30/11/2026", valor: 150, status: "Pago", fone: "97991960429" },
+      { id: 9, ramal: "TARRAFINHA", nome: "Neide", cto: "CTO 4", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone: "92992697429" },
+      { id: 10, ramal: "TARRAFINHA", nome: "Charle", cto: "CTO 4", vencimento: "04/11/2026", valor: 130, status: "Aberto", fone: "92991619665" },
+      { id: 11, ramal: "TARRAFINHA", nome: "Jasinei", cto: "CTO 4", vencimento: "02/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 12, ramal: "TARRAFINHA", nome: "Pescador", cto: "CTO 4", vencimento: "06/11/2026", valor: 150, status: "Pago", fone: "" },
+      { id: 13, ramal: "TARRAFINHA", nome: "Doca", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "97991877705" },
+      { id: 14, ramal: "TARRAFINHA", nome: "Edno", cto: "CTO 5", vencimento: "08/11/2026", valor: 130, status: "Aberto", fone: "92994856012" },
+      { id: 15, ramal: "TARRAFINHA", nome: "Ary", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Aberto", fone: "97984104142" },
+      { id: 16, ramal: "TARRAFINHA", nome: "Barroso", cto: "CTO 5", vencimento: "14/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 17, ramal: "TARRAFINHA", nome: "Rodrigo2", cto: "CTO 5", vencimento: "04/11/2026", valor: 130, status: "Aberto", fone: "97991350196" },
+      { id: 18, ramal: "TARRAFINHA", nome: "Raimundo Bur", cto: "CTO 6", vencimento: "04/11/2026", valor: 130, status: "Pago", fone: "97984081330" },
+      { id: 19, ramal: "TARRAFINHA", nome: "Patricia", cto: "CTO 6", vencimento: "07/11/2026", valor: 130, status: "Pago", fone: "92992893926" },
+      { id: 20, ramal: "TARRAFINHA", nome: "Fernanda2", cto: "CTO 6", vencimento: "03/11/2026", valor: 110, status: "Pago", fone: "" },
+      { id: 21, ramal: "TARRAFINHA", nome: "Gilmar", cto: "CTO 6", vencimento: "03/11/2026", valor: 110, status: "Aberto", fone: "" },
+      { id: 22, ramal: "TARRAFINHA", nome: "Falcão (Janders)", cto: "CTO 6", vencimento: "08/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 23, ramal: "TARRAFINHA", nome: "Thais", cto: "CTO 6", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 24, ramal: "TARRAFINHA", nome: "Betha", cto: "CTO 7", vencimento: "06/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 25, ramal: "TARRAFINHA", nome: "Maria (Ana)", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 26, ramal: "TARRAFINHA", nome: "Vinicius", cto: "CTO 7", vencimento: "06/11/2026", valor: 110, status: "Cortado", fone: "" },
+
+      // ASSEMBLEIA
+      { id: 27, ramal: "ASSEMBLEIA", nome: "Anamara", cto: "CTO 1", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 28, ramal: "ASSEMBLEIA", nome: "William", cto: "CTO 1", vencimento: "22/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 29, ramal: "ASSEMBLEIA", nome: "Railson", cto: "CTO 1", vencimento: "07/11/2026", valor: 150, status: "Aberto", fone: "" },
+      { id: 30, ramal: "ASSEMBLEIA", nome: "Leandro 2", cto: "CTO 4", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 31, ramal: "ASSEMBLEIA", nome: "Erlane Rai", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 32, ramal: "ASSEMBLEIA", nome: "Aqueles", cto: "CTO 5", vencimento: "04/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 33, ramal: "ASSEMBLEIA", nome: "Felipe", cto: "CTO 5", vencimento: "27/11/2026", valor: 100, status: "Pago", fone: "" },
+      { id: 34, ramal: "ASSEMBLEIA", nome: "Lene Laborda", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 35, ramal: "ASSEMBLEIA", nome: "Sheila", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 36, ramal: "ASSEMBLEIA", nome: "Mateus", cto: "CTO 5", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 37, ramal: "ASSEMBLEIA", nome: "Elionete", cto: "CTO 5", vencimento: "01/11/2026", valor: 180, status: "Aberto", fone: "" },
+      { id: 38, ramal: "ASSEMBLEIA", nome: "Aryanne", cto: "CTO 6", vencimento: "20/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 39, ramal: "ASSEMBLEIA", nome: "Afonso", cto: "CTO 6", vencimento: "10/11/2026", valor: 100, status: "Aberto", fone: "" },
+      { id: 40, ramal: "ASSEMBLEIA", nome: "Karina", cto: "CTO 7", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 41, ramal: "ASSEMBLEIA", nome: "Francieliton", cto: "CTO 7", vencimento: "06/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 42, ramal: "ASSEMBLEIA", nome: "Damares", cto: "CTO 7", vencimento: "17/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 43, ramal: "ASSEMBLEIA", nome: "Solange Marque", cto: "CTO 7", vencimento: "01/11/2026", valor: 110, status: "Aberto", fone: "" },
+      { id: 44, ramal: "ASSEMBLEIA", nome: "Ronilson", cto: "CTO 8", vencimento: "30/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 45, ramal: "ASSEMBLEIA", nome: "Andreia", cto: "CTO 8", vencimento: "30/11/2026", valor: 110, status: "Pago", fone: "" },
+      { id: 46, ramal: "ASSEMBLEIA", nome: "Liandra", cto: "CTO 8", vencimento: "07/11/2026", valor: 110, status: "Aberto", fone: "" },
+
+      // MANELITO
+      { id: 47, ramal: "MANELITO", nome: "Caboclo", cto: "CTO 1", vencimento: "20/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 48, ramal: "MANELITO", nome: "Emil", cto: "CTO 1", vencimento: "25/11/2026", valor: 130, status: "Cortado", fone: "" },
+      { id: 49, ramal: "MANELITO", nome: "Acriziley(Daniele)", cto: "CTO 1", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone: "" },
+      { id: 50, ramal: "MANELITO", nome: "ONU-Tony", cto: "CTO 2", vencimento: "15/11/2026", valor: 130, status: "Pago", fone: "9791658184" },
+      { id: 51, ramal: "MANELITO", nome: "Adriano", cto: "CTO 2", vencimento: "25/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 52, ramal: "MANELITO", nome: "Elineide", cto: "CTO 2", vencimento: "29/11/2026", valor: 130, status: "Pago", fone: "" },
+      { id: 53, ramal: "MANELITO", nome: "Joaquim", cto: "CTO 2", vencimento: "07/11/2026", valor: 130, status: "Aberto", fone
