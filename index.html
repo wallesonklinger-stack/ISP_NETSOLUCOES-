@@ -5,38 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Netsoluções</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background: #0b132b; color: #f8fafc; padding-bottom: 80px; }
     header { background: #111c3a; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 10; }
-    .btn { padding: 8px 12px; border-radius: 6px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; }
+    .btn { padding: 8px 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 12px; cursor: pointer; }
     .btn-novo { background: #0891b2; color: #fff; }
-    .btn-cfg { background: #1e293b; color: #94a3b8; font-size: 16px; }
+    .btn-instalar { background: #059669; color: #fff; }
+    .btn-cfg { background: #1e293b; color: #94a3b8; font-size: 15px; border: 1px solid #334155; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; }
-    .card-stat { background: #1e293b; padding: 12px; border-radius: 8px; }
+    .card-stat { background: #16203a; padding: 12px; border-radius: 10px; border: 1px solid #233154; }
     .card-stat span { font-size: 11px; color: #94a3b8; }
     .card-stat h3 { font-size: 18px; margin-top: 4px; }
+    .filtros { padding: 0 12px 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .input-busca, .select-ramal { width: 100%; padding: 9px 12px; background: #16203a; border: 1px solid #233154; color: #fff; border-radius: 8px; font-size: 12px; outline: none; }
     .lista { padding: 0 12px; display: flex; flex-direction: column; gap: 8px; }
-    .card-cli { background: #16203a; border: 1px solid #233154; padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 6px; }
-    .card-top { display: flex; justify-content: space-between; align-items: center; }
-    .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-    .pago { background: #052e16; color: #4ade80; }
-    .aberto { background: #451a03; color: #facc15; }
-    .cortado { background: #450a0a; color: #f87171; }
+    .card-cli { background: #16203a; border: 1px solid #233154; padding: 12px; border-radius: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .tag-ramal { font-size: 10px; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .tag-cto { font-size: 11px; color: #94a3b8; margin-left: 4px; }
+    .badge { font-size: 10px; padding: 3px 7px; border-radius: 6px; font-weight: bold; }
+    .pago { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+    .aberto { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4); }
+    .cortado { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .detalhes { display: flex; justify-content: space-between; font-size: 11px; color: #cbd5e1; border-top: 1px solid #233154; padding-top: 6px; margin-top: 2px; }
     .acoes { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
-    .btn-acao { padding: 4px 8px; border-radius: 4px; border: none; font-size: 11px; cursor: pointer; }
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 20; padding: 16px; }
-    .modal-box { background: #0e172a; padding: 16px; border-radius: 12px; width: 100%; max-width: 340px; border: 1px solid #334155; }
+    .btn-acao { padding: 5px 8px; border-radius: 6px; border: none; font-size: 11px; cursor: pointer; font-weight: 600; }
+    .btn-zap { background: #059669; color: #fff; text-decoration: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+    .modal-box { background: #0e172a; padding: 16px; border-radius: 14px; width: 100%; max-width: 340px; border: 1px solid #334155; max-height: 90vh; overflow-y: auto; }
     .modal-box input, .modal-box select { width: 100%; padding: 8px; background: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 6px; margin: 4px 0 10px 0; font-size: 12px; }
   </style>
 </head>
 <body>
   <header>
     <div>
-      <h2 style="font-size:16px;">Netsoluções</h2>
-      <p style="font-size:11px; color:#38bdf8;">Gestão Telecom</p>
+      <h2 style="font-size:16px; font-weight:800;">Netsoluções</h2>
+      <p style="font-size:10px; color:#38bdf8;">Gestão Telecom</p>
     </div>
     <div style="display:flex; gap:6px;">
       <button class="btn btn-novo" onclick="abrirNovo()">+ Novo</button>
+      <button class="btn btn-instalar" onclick="instalarApp()">Instalar</button>
       <button class="btn btn-cfg" onclick="abrirConfig()">⚙</button>
     </div>
   </header>
@@ -60,24 +68,33 @@
     </div>
   </div>
 
+  <div class="filtros">
+    <input type="text" id="inputBusca" class="input-busca" placeholder="🔍 Buscar cliente, ramal, CTO..." oninput="render()">
+    <select id="selectRamal" class="select-ramal" onchange="render()">
+      <option value="">Todos os Ramais</option>
+    </select>
+  </div>
+
   <div class="lista" id="listaClientes"></div>
 
-  <!-- Modal Cadastro/Edição -->
+  <!-- Modal Cadastro e Edição -->
   <div class="modal" id="modalCli">
     <div class="modal-box">
       <h3 id="modalTitulo" style="font-size:14px; margin-bottom:8px;">Cliente</h3>
       <input type="hidden" id="cliId">
-      <label style="font-size:11px;">Nome:</label>
+      <label style="font-size:11px; color:#94a3b8;">Nome:</label>
       <input type="text" id="cliNome">
-      <label style="font-size:11px;">Ramal:</label>
+      <label style="font-size:11px; color:#94a3b8;">Ramal:</label>
       <input type="text" id="cliRamal">
-      <label style="font-size:11px;">CTO:</label>
+      <label style="font-size:11px; color:#94a3b8;">CTO / Porta:</label>
       <input type="text" id="cliCto">
-      <label style="font-size:11px;">Valor (R$):</label>
+      <label style="font-size:11px; color:#94a3b8;">Vencimento:</label>
+      <input type="text" id="cliVenc" placeholder="30/11/2026">
+      <label style="font-size:11px; color:#94a3b8;">Valor (R$):</label>
       <input type="number" id="cliValor">
-      <label style="font-size:11px;">WhatsApp:</label>
-      <input type="text" id="cliFone">
-      <label style="font-size:11px;">Status:</label>
+      <label style="font-size:11px; color:#94a3b8;">WhatsApp:</label>
+      <input type="text" id="cliFone" placeholder="92999998888">
+      <label style="font-size:11px; color:#94a3b8;">Status:</label>
       <select id="cliStatus">
         <option value="Pago">Pago</option>
         <option value="Aberto">Aberto</option>
@@ -85,20 +102,21 @@
       </select>
       <div style="display:flex; gap:6px;">
         <button class="btn btn-novo" style="flex:1;" onclick="salvarCli()">Salvar</button>
-        <button class="btn" style="background:#450a0a; color:#f87171;" onclick="fecharModal()">Fechar</button>
+        <button id="btnExcluir" class="btn" style="background:#450a0a; color:#f87171;" onclick="excluirCli()">Excluir</button>
+        <button class="btn" style="background:#1e293b; color:#94a3b8;" onclick="fecharModal()">Fechar</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal Config -->
+  <!-- Modal Configurações -->
   <div class="modal" id="modalCfg">
     <div class="modal-box">
       <h3 style="font-size:14px; margin-bottom:8px;">Configurações</h3>
-      <label style="font-size:11px;">Chave PIX:</label>
+      <label style="font-size:11px; color:#94a3b8;">Chave PIX:</label>
       <input type="text" id="cfgPix">
-      <div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
         <button class="btn btn-novo" onclick="salvarCfg()">Salvar PIX</button>
-        <button class="btn" style="background:#7f1d1d; color:#fff;" onclick="restaurarBase()">Recarregar 171 Clientes</button>
+        <button class="btn" style="background:#7f1d1d; color:#fff;" onclick="restaurarBase()">Restaurar Todos os 171 Clientes</button>
         <button class="btn" style="background:#1e293b; color:#94a3b8;" onclick="fecharCfg()">Fechar</button>
       </div>
     </div>
@@ -106,173 +124,6 @@
 
   <script>
     const DADOS_BASE = [
-      { id: 1, ramal: "TARRAFINHA", nome: "Ariadna", cto: "CTO 2", valor: 130, status: "Pago", fone: "92991780727" },
-      { id: 2, ramal: "TARRAFINHA", nome: "Rose", cto: "CTO 2", valor: 130, status: "Pago", fone: "" },
-      { id: 3, ramal: "TARRAFINHA", nome: "Gessiane", cto: "CTO 2", valor: 130, status: "Pago", fone: "" },
-      { id: 4, ramal: "TARRAFINHA", nome: "Marilene", cto: "CTO 3", valor: 130, status: "Pago", fone: "97991521046" },
-      { id: 5, ramal: "TARRAFINHA", nome: "Tainá", cto: "CTO 3", valor: 130, status: "Pago", fone: "" },
-      { id: 6, ramal: "TARRAFINHA", nome: "Franck", cto: "CTO 4", valor: 130, status: "Pago", fone: "92993768055" },
-      { id: 7, ramal: "TARRAFINHA", nome: "Emergência", cto: "CTO 4", valor: 130, status: "Pago", fone: "" },
-      { id: 8, ramal: "TARRAFINHA", nome: "Emergência-H", cto: "CTO 4", valor: 150, status: "Pago", fone: "97991960429" },
-      { id: 9, ramal: "TARRAFINHA", nome: "Neide", cto: "CTO 4", valor: 130, status: "Aberto", fone: "92992697429" },
-      { id: 10, ramal: "TARRAFINHA", nome: "Charle", cto: "CTO 4", valor: 130, status: "Aberto", fone: "92991619665" },
-      { id: 11, ramal: "TARRAFINHA", nome: "Jasinei", cto: "CTO 4", valor: 130, status: "Pago", fone: "" },
-      { id: 12, ramal: "TARRAFINHA", nome: "Pescador", cto: "CTO 4", valor: 150, status: "Pago", fone: "" },
-      { id: 13, ramal: "TARRAFINHA", nome: "Doca", cto: "CTO 5", valor: 130, status: "Pago", fone: "97991877705" },
-      { id: 14, ramal: "TARRAFINHA", nome: "Edno", cto: "CTO 5", valor: 130, status: "Aberto", fone: "92994856012" },
-      { id: 15, ramal: "TARRAFINHA", nome: "Ary", cto: "CTO 5", valor: 130, status: "Aberto", fone: "97984104142" },
-      { id: 16, ramal: "TARRAFINHA", nome: "Barroso", cto: "CTO 5", valor: 130, status: "Aberto", fone: "" },
-      { id: 17, ramal: "TARRAFINHA", nome: "Rodrigo2", cto: "CTO 5", valor: 130, status: "Aberto", fone: "97991350196" },
-      { id: 18, ramal: "TARRAFINHA", nome: "Raimundo Bur", cto: "CTO 6", valor: 130, status: "Pago", fone: "97984081330" },
-      { id: 19, ramal: "TARRAFINHA", nome: "Patricia", cto: "CTO 6", valor: 130, status: "Pago", fone: "92992893926" },
-      { id: 20, ramal: "TARRAFINHA", nome: "Fernanda2", cto: "CTO 6", valor: 110, status: "Pago", fone: "" },
-      { id: 21, ramal: "TARRAFINHA", nome: "Gilmar", cto: "CTO 6", valor: 110, status: "Aberto", fone: "" },
-      { id: 22, ramal: "TARRAFINHA", nome: "Falcão", cto: "CTO 6", valor: 130, status: "Aberto", fone: "" },
-      { id: 23, ramal: "TARRAFINHA", nome: "Thais", cto: "CTO 6", valor: 130, status: "Pago", fone: "" },
-      { id: 24, ramal: "TARRAFINHA", nome: "Betha", cto: "CTO 7", valor: 130, status: "Pago", fone: "" },
-      { id: 25, ramal: "TARRAFINHA", nome: "Maria (Ana)", cto: "CTO 7", valor: 130, status: "Pago", fone: "" },
-      { id: 26, ramal: "TARRAFINHA", nome: "Vinicius", cto: "CTO 7", valor: 110, status: "Cortado", fone: "" },
-      { id: 27, ramal: "ASSEMBLEIA", nome: "Anamara", cto: "CTO 1", valor: 130, status: "Pago", fone: "" },
-      { id: 28, ramal: "ASSEMBLEIA", nome: "William", cto: "CTO 1", valor: 130, status: "Aberto", fone: "" },
-      { id: 29, ramal: "ASSEMBLEIA", nome: "Railson", cto: "CTO 1", valor: 150, status: "Aberto", fone: "" },
-      { id: 30, ramal: "ASSEMBLEIA", nome: "Leandro 2", cto: "CTO 4", valor: 130, status: "Pago", fone: "" }
-    ];
-
-    let clientes = JSON.parse(localStorage.getItem('isp_db')) || DADOS_BASE;
-    let chavePix = localStorage.getItem('isp_pix') || "97991521046";
-
-    function guardar() {
-      localStorage.setItem('isp_db', JSON.stringify(clientes));
-      localStorage.setItem('isp_pix', chavePix);
-    }
-
-    function render() {
-      let rec = 0, abt = 0, cor = 0;
-      clientes.forEach(c => {
-        let v = Number(c.valor) || 0;
-        if (c.status === 'Pago') rec += v;
-        else if (c.status === 'Aberto') abt += v;
-        else if (c.status === 'Cortado') cor += v;
-      });
-
-      document.getElementById('statTotal').innerText = clientes.length;
-      document.getElementById('statPago').innerText = 'R$ ' + rec;
-      document.getElementById('statAberto').innerText = 'R$ ' + abt;
-      document.getElementById('statCortado').innerText = 'R$ ' + cor;
-
-      let el = document.getElementById('listaClientes');
-      el.innerHTML = '';
-      clientes.forEach(c => {
-        let bClass = c.status === 'Pago' ? 'pago' : (c.status === 'Aberto' ? 'aberto' : 'cortado');
-        el.innerHTML += `
-          <div class="card-cli">
-            <div class="card-top">
-              <div>
-                <span style="font-size:10px; color:#38bdf8;">${c.ramal} - ${c.cto}</span>
-                <h4 style="font-size:14px;">${c.nome}</h4>
-              </div>
-              <div style="display:flex; gap:6px; align-items:center;">
-                <span class="badge ${bClass}">${c.status}</span>
-                <button onclick="editarCli(${c.id})" style="background:#1e293b; color:#38bdf8; border:1px solid #334155; border-radius:4px; padding:3px 6px;">✏️</button>
-              </div>
-            </div>
-            <div style="font-size:12px; color:#4ade80; font-weight:bold;">R$ ${c.valor},00</div>
-            <div class="acoes">
-              <div style="display:flex; gap:4px;">
-                <button class="btn-acao" style="background:#052e16; color:#4ade80;" onclick="mudarSt(${c.id}, 'Pago')">Pago</button>
-                <button class="btn-acao" style="background:#451a03; color:#facc15;" onclick="mudarSt(${c.id}, 'Aberto')">Aberto</button>
-                <button class="btn-acao" style="background:#450a0a; color:#f87171;" onclick="mudarSt(${c.id}, 'Cortado')">Cortar</button>
-              </div>
-              ${c.fone ? `<a href="https://wa.me/55${c.fone}?text=Olá ${c.nome}, fatura da Netsoluções no valor de R$ ${c.valor}. PIX: ${chavePix}" target="_blank" style="color:#4ade80; font-size:11px; text-decoration:none; font-weight:bold;">WhatsApp</a>` : ''}
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function mudarSt(id, st) {
-      let c = clientes.find(x => x.id === id);
-      if (c) { c.status = st; guardar(); render(); }
-    }
-
-    function abrirNovo() {
-      document.getElementById('modalTitulo').innerText = "Novo Cliente";
-      document.getElementById('cliId').value = "";
-      document.getElementById('cliNome').value = "";
-      document.getElementById('cliRamal').value = "TARRAFINHA";
-      document.getElementById('cliCto').value = "CTO 1";
-      document.getElementById('cliValor').value = "130";
-      document.getElementById('cliFone').value = "";
-      document.getElementById('cliStatus').value = "Aberto";
-      document.getElementById('modalCli').style.display = 'flex';
-    }
-
-    function editarCli(id) {
-      let c = clientes.find(x => x.id === id);
-      if (!c) return;
-      document.getElementById('modalTitulo').innerText = "Editar Cliente";
-      document.getElementById('cliId').value = c.id;
-      document.getElementById('cliNome').value = c.nome;
-      document.getElementById('cliRamal').value = c.ramal;
-      document.getElementById('cliCto').value = c.cto;
-      document.getElementById('cliValor').value = c.valor;
-      document.getElementById('cliFone').value = c.fone;
-      document.getElementById('cliStatus').value = c.status;
-      document.getElementById('modalCli').style.display = 'flex';
-    }
-
-    function fecharModal() {
-      document.getElementById('modalCli').style.display = 'none';
-    }
-
-    function salvarCli() {
-      let nome = document.getElementById('cliNome').value.trim();
-      if (!nome) return alert("Indique o nome");
-      let id = document.getElementById('cliId').value;
-      let obj = {
-        nome: nome,
-        ramal: document.getElementById('cliRamal').value.trim(),
-        cto: document.getElementById('cliCto').value.trim(),
-        valor: Number(document.getElementById('cliValor').value) || 130,
-        fone: document.getElementById('cliFone').value.trim(),
-        status: document.getElementById('cliStatus').value
-      };
-      if (id) {
-        let i = clientes.findIndex(x => x.id == id);
-        if (i !== -1) clientes[i] = { ...clientes[i], ...obj };
-      } else {
-        obj.id = Date.now();
-        clientes.unshift(obj);
-      }
-      guardar();
-      render();
-      fecharModal();
-    }
-
-    function abrirConfig() {
-      document.getElementById('cfgPix').value = chavePix;
-      document.getElementById('modalCfg').style.display = 'flex';
-    }
-
-    function fecharCfg() {
-      document.getElementById('modalCfg').style.display = 'none';
-    }
-
-    function salvarCfg() {
-      chavePix = document.getElementById('cfgPix').value.trim();
-      guardar();
-      fecharCfg();
-      render();
-    }
-
-    function restaurarBase() {
-      clientes = JSON.parse(JSON.stringify(DADOS_BASE));
-      guardar();
-      render();
-      fecharCfg();
-    }
-
-    render();
-  </script>
-</body>
-</html>
+      // 2. TARRAFINHA (R104)
+      { id: 1, ramal: "TARRAFINHA", nome: "Ariadna", cto:
+        
