@@ -328,4 +328,153 @@
     let clientes = (clientesSalvos && JSON.parse(clientesSalvos).length > 0) ? JSON.parse(clientesSalvos) : [...CLIENTES_PADRAO];
     let config = JSON.parse(localStorage.getItem('isp_config')) || { pix: "97991521046" };
 
-    function salvarDados()
+    function salvarDados() {
+      localStorage.setItem('isp_clientes_v2', JSON.stringify(clientes));
+      localStorage.setItem('isp_config', JSON.stringify(config));
+    }
+
+    function popularRamais() {
+      const select = document.getElementById('filtroRamal');
+      const ramais = [...new Set(clientes.map(c => c.ramal))];
+      select.innerHTML = '<option value="">Todos os Ramais</option>';
+      ramais.forEach(r => { select.innerHTML += `<option value="${r}">${r}</option>`; });
+    }
+
+    function renderizar() {
+      const container = document.getElementById('containerClientes');
+      const busca = document.getElementById('inputBusca').value.toLowerCase();
+      const ramalFiltro = document.getElementById('filtroRamal').value;
+      const statusFiltro = document.getElementById('filtroStatus').value;
+
+      let filtrados = clientes.filter(c => {
+        const matchesBusca = c.nome.toLowerCase().includes(busca) || c.cto.toLowerCase().includes(busca) || (c.fone && c.fone.includes(busca));
+        const matchesRamal = !ramalFiltro || c.ramal === ramalFiltro;
+        const matchesStatus = !statusFiltro || c.status === statusFiltro;
+        return matchesBusca && matchesRamal && matchesStatus;
+      });
+
+      let totalRecebido = 0, totalAberto = 0, totalCortado = 0;
+      let countPago = 0, countAberto = 0, countCortado = 0;
+
+      clientes.forEach(c => {
+        if (c.status === 'Pago') { totalRecebido += c.valor; countPago++; }
+        else if (c.status === 'Aberto') { totalAberto += c.valor; countAberto++; }
+        else if (c.status === 'Cortado') { totalCortado += c.valor; countCortado++; }
+      });
+
+      document.getElementById('statTotalClientes').innerText = clientes.length;
+      document.getElementById('statEmDia').innerText = `${countPago} pagos`;
+      document.getElementById('statTotalPago').innerText = `R$ ${totalRecebido.toLocaleString('pt-BR')}`;
+      document.getElementById('statCountPago').innerText = `${countPago} quitações`;
+      document.getElementById('statTotalAberto').innerText = `R$ ${totalAberto.toLocaleString('pt-BR')}`;
+      document.getElementById('statCountAberto').innerText = `${countAberto} em aberto`;
+      document.getElementById('statTotalCortado').innerText = `R$ ${totalCortado.toLocaleString('pt-BR')}`;
+      document.getElementById('statCountCortado').innerText = `${countCortado} bloqueados`;
+
+      container.innerHTML = '';
+      if (filtrados.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">Nenhum cliente encontrado.</div>`;
+        return;
+      }
+
+      filtrados.forEach(c => {
+        let badgeClass = c.status === 'Pago' ? 'status-pago' : (c.status === 'Aberto' ? 'status-aberto' : 'status-cortado');
+        let iconStatus = c.status === 'Pago' ? 'fa-check' : (c.status === 'Aberto' ? 'fa-clock' : 'fa-xmark');
+
+        container.innerHTML += `
+          <div class="glass-card rounded-xl p-3 flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-[10px] text-cyan-400 font-medium">${c.ramal}</span>
+                <h4 class="text-sm font-bold text-white">${c.nome}</h4>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-1 ${badgeClass}">
+                <i class="fa-solid ${iconStatus}"></i> ${c.status}
+              </span>
+            </div>
+            <div class="grid grid-cols-3 gap-1 py-1 border-y border-slate-800 text-[11px]">
+              <div>
+                <span class="text-[9px] text-slate-400 block">CTO / Porta</span>
+                <span class="text-slate-200 font-medium">${c.cto}</span>
+              </div>
+              <div>
+                <span class="text-[9px] text-slate-400 block">Vencimento</span>
+                <span class="text-slate-200 font-medium">${c.vencimento}</span>
+              </div>
+              <div>
+                <span class="text-[9px] text-slate-400 block">Valor</span>
+                <span class="text-emerald-400 font-bold">R$ ${c.valor},00</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <div class="flex gap-1">
+                <button onclick="mudarStatus(${c.id}, 'Pago')" class="w-7 h-7 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button onclick="mudarStatus(${c.id}, 'Aberto')" class="w-7 h-7 rounded-lg bg-amber-950/60 text-amber-400 border border-amber-800/40 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-clock"></i>
+                </button>
+                <button onclick="mudarStatus(${c.id}, 'Cortado')" class="w-7 h-7 rounded-lg bg-rose-950/60 text-rose-400 border border-rose-800/40 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-ban"></i>
+                </button>
+              </div>
+              ${c.fone ? `
+                <a href="https://wa.me/55${c.fone}?text=${encodeURIComponent('Olá ' + c.nome + ', segue a cobrança da sua internet Netsoluções Telecom no valor de R$ ' + c.valor + ',00 com vencimento em ' + c.vencimento + '. Chave PIX: ' + config.pix)}" target="_blank" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-lg text-white text-[11px] font-semibold flex items-center gap-1 shadow-md shadow-emerald-600/20">
+                  <i class="fa-brands fa-whatsapp text-xs"></i> Cobrar PIX
+                </a>
+              ` : `
+                <span class="text-[10px] text-slate-500 italic">Sem WhatsApp</span>
+              `}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function mudarStatus(id, novoStatus) {
+      const index = clientes.findIndex(c => c.id === id);
+      if (index !== -1) {
+        clientes[index].status = novoStatus;
+        salvarDados();
+        renderizar();
+      }
+    }
+
+    function abrirConfig() {
+      document.getElementById('configPix').value = config.pix;
+      document.getElementById('modalConfig').classList.remove('hidden');
+    }
+    function fecharConfig() {
+      document.getElementById('modalConfig').classList.add('hidden');
+    }
+    function salvarConfig() {
+      config.pix = document.getElementById('configPix').value;
+      salvarDados();
+      fecharConfig();
+      renderizar();
+    }
+    function exportarBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clientes));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "backup_netsolucoes.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+    function restaurarPadrao(forcar = false) {
+      if (forcar || confirm("Deseja restaurar a base de dados completa lida das imagens?")) {
+        clientes = JSON.parse(JSON.stringify(CLIENTES_PADRAO));
+        salvarDados();
+        popularRamais();
+        renderizar();
+        if(!forcar) fecharConfig();
+      }
+    }
+
+    salvarDados();
+    popularRamais();
+    renderizar();
+  </script>
+</body>
+</html>
